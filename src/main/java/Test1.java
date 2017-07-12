@@ -1,7 +1,8 @@
-import java.io.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
-
 //import java.util.Objects;
 //import jdk.internal.org.xml.sax.SAXException;
 
@@ -51,7 +52,6 @@ public class Test1 {
 //            System.out.println(ex);
 //        }
 //    }
-
     public static void main(String[] args) throws IOException {
         System.out.println("Gradle Test");
 
@@ -65,15 +65,19 @@ public class Test1 {
 
         String jsonData = new String(Files.readAllBytes(Paths.get("/home/victoria/Temp/com.commend.platform.mediastore.Media.json/")));
 //        jsonData = Inhalt von Mediafile
-//        Parser.parseJsonFile(jsonData);
-
-
-
+//        Parser.parseMedia(jsonData);
 
         final String directory = "/home/victoria/Temp/backup";
-        Parser.parseBackupFile(directory,jsonData);
+        Parser.parseBackupFile(directory);
 
+        System.out.println("\nCompare MediaCategory");
+        Compare.compare(Store.hashMapMediaC, Store.hashMapmediaCategory, Compare.hashMapMC);
 
+        System.out.println("\nCompare Mediastore");
+        Compare.compare(Store.hashMapMediaS, Store.hashMapMediaStore, Compare.hashMapMF);
+
+        System.out.println("\nCheck");
+        Compare.check();
 
 
     }

@@ -5,13 +5,34 @@ import java.util.HashMap;
  */
 public class Store {
 
-    public static HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
+    public static HashMap<Integer, String> hashMapMediaC = new HashMap<Integer, String>();
+    public static HashMap<Integer, String> hashMapmediaCategory = new HashMap<>();
+    public static HashMap<Integer, String> hashMapMediaStore = new HashMap<>();
+    public static HashMap<Integer, String> hashMapMediaS = new HashMap<>();
 
 
-    public static void storeData(Integer key, String value){
+    public static void storeDataMediaC(int key, String value) {
 
-        hashMap.put(key, value);
-        System.out.println("Key: " + key + " " + "Value: " + hashMap.get(key));
+        hashMapMediaC.put(key, value);
+//        System.out.println("Key: " + key + " " + "Value: " + hashMapMediaC.get(key));
+    }
 
+    public static void storeDataMediaCategory(int key, String value) {
+
+        hashMapmediaCategory.put(key, value);
+//        System.out.println("Key: " + key + " " + "Value: " + hashMapmediaCategory.get(key));
+
+    }
+
+    public static void storeDataMediaStore(int key, String value) {
+
+        hashMapMediaStore.put(key, value);
+        System.out.println("Key: " + key + " " + "Value: " + hashMapMediaStore.get(key));
+    }
+
+    public static void storeDataMediaS(int key, String value) {
+
+        hashMapMediaS.put(key, value);
+        System.out.println("Key: " + key + " " + "Value: " + hashMapMediaS.get(key));
     }
 }

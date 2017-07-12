@@ -38,9 +38,7 @@ public class Unzip {
                 unzip(backupfile, destination);
             }
 
-
             zipEntry = zis.getNextEntry();
-
 
         }
         zis.closeEntry();
