@@ -5,7 +5,7 @@ package Server;
  */
 
 
-public class Server{
+public class Server {
 
 //    private final UndertowJaxrsServer server = new UndertowJaxrsServer();
 }

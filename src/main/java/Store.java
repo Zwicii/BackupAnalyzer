@@ -11,7 +11,6 @@ public class Store {
     public static HashMap<Integer, String> hashMapMediaS = new HashMap<>();
 
 
-
     public static void storeDataMediaC(int key, String value) {
 
         hashMapMediaC.put(key, value);

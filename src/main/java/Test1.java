@@ -10,7 +10,6 @@ import java.util.HashMap;
 //import jdk.internal.org.xml.sax.SAXException;
 
 
-
 /**
  * Created by victoria on 07.07.17.
  */
@@ -18,7 +17,7 @@ public class Test1 {
 
     public static final Logger logger = LogManager.getLogger(Test1.class);
 
-    public static void getLoggerEntries() throws IOException{
+    public static void getLoggerEntries() throws IOException {
 
         //        logger.info("Gradle Test");
 
@@ -48,7 +47,6 @@ public class Test1 {
     }
 
     public static void main(String[] args) throws IOException {
-
 
 
     }

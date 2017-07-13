@@ -11,7 +11,6 @@ public class Compare {
     public static HashMap<String, Boolean> hashMapMF = new HashMap<>();
 
 
-
     public static void compare(HashMap<Integer, String> hashMap1, HashMap<Integer, String> hashMap2, HashMap<String, Boolean> hashMap3) {
 
 
@@ -41,7 +40,6 @@ public class Compare {
 
         hashMapCheck.put("com.commend.platform.mediastore.MediaCategory", hashMapMC);
         hashMapCheck.put("com.commend.platform.mediastore.Media", hashMapMF);
-
 
 
         for (HashMap.Entry<String, HashMap> entry : hashMapCheck.entrySet()) {
