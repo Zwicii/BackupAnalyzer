@@ -26,27 +26,26 @@ public class Parser {
         }
 
         File directory = new File(directorybackup);
-
         //get all the files from a directory
         File[] fList = directory.listFiles();
 
         for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
 
-//            System.out.println(file.getName());
+//            Test1.logger.info(file.getName());
 
             if (file.getName().endsWith(".Media.json")) {
 
-                System.out.println("\nfound Media");
+                Test1.logger.info("\nfound Media");
                 Parser.parseMedia(jsonDataMedia);
             }
 
             if (file.getName().endsWith(".MediaCategory.json")) {
-                System.out.println("\nfound MediaCategory");
+                Test1.logger.info("\nfound MediaCategory");
                 Parser.parsemediaCategory(jsonDataMediaCategory);
             }
 
             if (file.getName().equals("mediastore")) {
-                System.out.println("\nfound mediastore");
+                Test1.logger.info("\nfound mediastore");
                 Parser.parseMediaStore(directorymediastore);
             }
         }
@@ -57,7 +56,7 @@ public class Parser {
         int j = 0;
         int k = 0;
 //        String deviceDescription = obj.getJSONObject("deviceDescription").getString("applicationName");
-//        System.out.println("deviceDescription: " + deviceDescription);
+//        Test1.logger.info("deviceDescription: " + deviceDescription);
 
 
         JSONArray arr = obj.getJSONArray("entities");
@@ -65,11 +64,19 @@ public class Parser {
 
             JSONObject objmediaCategory = arr.getJSONObject(i).getJSONObject("mediaCategory");
             String idmediaCategory = objmediaCategory.getString("id");
-            System.out.println(i + ": mediaCategory-id: " + idmediaCategory);
+            Test1.logger.info(i + ": mediaCategory-id: " + idmediaCategory);
+
             String namemediaCategory = objmediaCategory.getString("name");
-            System.out.println(i + ": mediaCategory-name: " + namemediaCategory);
+            Test1.logger.info(i + ": mediaCategory-name: " + namemediaCategory);
+
             String id = arr.getJSONObject(i).getString("id");
-            System.out.println(i + ": entities-id: " + id);
+            Test1.logger.info(i + ": entities-id: " + id);
+
+            String displayName = arr.getJSONObject(i).getString("displayName");
+            Test1.logger.info(i + ": entities-displayName: " + displayName);
+
+            //Namen holen und dann mit Store in Name hashmap speichern als value und dann mit id als key value wiederfinden
+
 
             Store.storeDataMediaC(j, idmediaCategory);
             j++;
@@ -90,9 +97,9 @@ public class Parser {
         for (int i = 0; i < arr.length(); i++) {
 
             String id = arr.getJSONObject(i).getString("id");
-            System.out.println(i + ": entities-id: " + id);
+            Test1.logger.info(i + ": entities-id: " + id);
             String name = arr.getJSONObject(i).getString("name");
-            System.out.println(i + ": entities-name: " + name);
+            Test1.logger.info(i + ": entities-name: " + name);
 
             Store.storeDataMediaCategory(j, id);
             j++;
@@ -115,7 +122,7 @@ public class Parser {
 
             if (mfile.getName().equals("sounds")) {
 
-                System.out.println("\nfound sounds");
+                Test1.logger.info("\nfound sounds");
 
                 final String directorymediastoresounds = "/home/victoria/Temp/backup/mediastore/sounds";
                 File directorymediasounds = new File(directorymediastoresounds);
@@ -123,7 +130,7 @@ public class Parser {
 
                 for (File msfile : msoundsfList) {
 
-                    System.out.println(msfile.getName());
+                    Test1.logger.info(msfile.getName());
                     Store.storeDataMediaStore(j, msfile.getName());
                     j++;
                     k = j;
@@ -133,7 +140,7 @@ public class Parser {
 
             if (mfile.getName().equals("snapshots")) {
 
-                System.out.println("\nfound snapshots");
+                Test1.logger.info("\nfound snapshots");
 
                 final String directorymediastoresnap = "/home/victoria/Temp/backup/mediastore/snapshots/";
                 File directorymediasnap = new File(directorymediastoresnap);
@@ -141,7 +148,7 @@ public class Parser {
 
                 for (File mshfile : msnaphotfList) {
 
-                    System.out.println(mshfile.getName());
+                    Test1.logger.info(mshfile.getName());
                     Store.storeDataMediaStore(k, mshfile.getName());
                     k++;
 

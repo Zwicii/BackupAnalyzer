@@ -11,6 +11,7 @@ public class Compare {
     public static HashMap<String, Boolean> hashMapMF = new HashMap<>();
 
 
+
     public static void compare(HashMap<Integer, String> hashMap1, HashMap<Integer, String> hashMap2, HashMap<String, Boolean> hashMap3) {
 
 
@@ -20,7 +21,7 @@ public class Compare {
 
             for (int j = 0; j < hashMap2.size(); j++) {
                 if (hashMap1.get(i).equals(hashMap2.get(j))) {
-                    System.out.println(hashMap1.get(i) + ": OK");
+                    Test1.logger.info(hashMap1.get(i) + ": OK");
                     found = true;
                     hashMap3.put(hashMap1.get(i), found);
 
@@ -29,8 +30,8 @@ public class Compare {
             }
 
             if (found == false) {
-                System.out.println(hashMap1.get(i) + ": MediaCategory doest't exist");
-//                hashMapCheck.put(k,hashMap1.get(i) +": "+ found);
+                Test1.logger.error(hashMap1.get(i) + ": MediaCategory doest't exist");
+                hashMap3.put(hashMap1.get(i), found);
 
             }
         }
@@ -42,10 +43,11 @@ public class Compare {
         hashMapCheck.put("com.commend.platform.mediastore.Media", hashMapMF);
 
 
+
         for (HashMap.Entry<String, HashMap> entry : hashMapCheck.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            System.out.println("\nKey: " + key);
+            Test1.logger.info("\nKey: " + key);
 
 
             if (key.equals("com.commend.platform.mediastore.MediaCategory")) {
@@ -53,7 +55,7 @@ public class Compare {
 
                     String keyMC = entryMC.getKey();
                     Boolean valueMC = entryMC.getValue();
-                    System.out.println(keyMC + ": " + valueMC);
+                    Test1.logger.info(keyMC + ": " + valueMC);
                 }
             }
 
@@ -62,7 +64,7 @@ public class Compare {
 
                     String keyMF = entryMF.getKey();
                     Boolean valueMF = entryMF.getValue();
-                    System.out.println(keyMF + ": " + valueMF);
+                    Test1.logger.info(keyMF + ": " + valueMF);
                 }
             }
 
