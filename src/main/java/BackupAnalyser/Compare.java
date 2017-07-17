@@ -1,3 +1,5 @@
+package BackupAnalyser;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ public class Compare {
 
             for (int j = 0; j < hashMap2.size(); j++) {
                 if (hashMap1.get(i).equals(hashMap2.get(j))) {
-                    Test1.logger.info(hashMap1.get(i) + ": OK");
+                    Main.logger.info(hashMap1.get(i) + ": OK");
                     found = true;
                     hashMap3.put(hashMap1.get(i), found);
 
@@ -29,7 +31,7 @@ public class Compare {
             }
 
             if (found == false) {
-                Test1.logger.error(hashMap1.get(i) + ": MediaCategory doest't exist");
+                Main.logger.error(hashMap1.get(i) + ": MediaCategory doest't exist");
                 hashMap3.put(hashMap1.get(i), found);
 
             }
@@ -45,7 +47,7 @@ public class Compare {
         for (HashMap.Entry<String, HashMap> entry : hashMapCheck.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            Test1.logger.info("\nKey: " + key);
+            Main.logger.info("\nKey: " + key);
 
 
             if (key.equals("com.commend.platform.mediastore.MediaCategory")) {
@@ -53,7 +55,7 @@ public class Compare {
 
                     String keyMC = entryMC.getKey();
                     Boolean valueMC = entryMC.getValue();
-                    Test1.logger.info(keyMC + ": " + valueMC);
+                    Main.logger.info(keyMC + ": " + valueMC);
                 }
             }
 
@@ -62,7 +64,7 @@ public class Compare {
 
                     String keyMF = entryMF.getKey();
                     Boolean valueMF = entryMF.getValue();
-                    Test1.logger.info(keyMF + ": " + valueMF);
+                    Main.logger.info(keyMF + ": " + valueMF);
                 }
             }
 

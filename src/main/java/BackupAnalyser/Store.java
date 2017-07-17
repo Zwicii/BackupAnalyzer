@@ -1,3 +1,7 @@
+package BackupAnalyser;
+
+import BackupAnalyser.Main;
+
 import java.util.HashMap;
 
 /**
@@ -27,13 +31,13 @@ public class Store {
     public static void storeDataMediaStore(int key, String value) {
 
         hashMapMediaStore.put(key, value);
-        Test1.logger.info("Key: " + key + " " + "Value: " + hashMapMediaStore.get(key));
+        Main.logger.info("Key: " + key + " " + "Value: " + hashMapMediaStore.get(key));
     }
 
     public static void storeDataMediaS(int key, String value) {
 
         hashMapMediaS.put(key, value);
-        Test1.logger.info("Key: " + key + " " + "Value: " + hashMapMediaS.get(key));
+        Main.logger.info("Key: " + key + " " + "Value: " + hashMapMediaS.get(key));
     }
 
 }

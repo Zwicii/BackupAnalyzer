@@ -1,3 +1,5 @@
+package BackupAnalyser;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,17 +37,17 @@ public class Parser {
 
             if (file.getName().endsWith(".Media.json")) {
 
-                Test1.logger.info("\nfound Media");
+                Main.logger.info("\nfound Media");
                 Parser.parseMedia(jsonDataMedia);
             }
 
             if (file.getName().endsWith(".MediaCategory.json")) {
-                Test1.logger.info("\nfound MediaCategory");
+                Main.logger.info("\nfound MediaCategory");
                 Parser.parsemediaCategory(jsonDataMediaCategory);
             }
 
             if (file.getName().equals("mediastore")) {
-                Test1.logger.info("\nfound mediastore");
+                Main.logger.info("\nfound mediastore");
                 Parser.parseMediaStore(directorymediastore);
             }
         }
@@ -64,18 +66,18 @@ public class Parser {
 
             JSONObject objmediaCategory = arr.getJSONObject(i).getJSONObject("mediaCategory");
             String idmediaCategory = objmediaCategory.getString("id");
-            Test1.logger.info(i + ": mediaCategory-id: " + idmediaCategory);
+            Main.logger.info(i + ": mediaCategory-id: " + idmediaCategory);
 
             String namemediaCategory = objmediaCategory.getString("name");
-            Test1.logger.info(i + ": mediaCategory-name: " + namemediaCategory);
+            Main.logger.info(i + ": mediaCategory-name: " + namemediaCategory);
 
             String id = arr.getJSONObject(i).getString("id");
-            Test1.logger.info(i + ": entities-id: " + id);
+            Main.logger.info(i + ": entities-id: " + id);
 
             String displayName = arr.getJSONObject(i).getString("displayName");
-            Test1.logger.info(i + ": entities-displayName: " + displayName);
+            Main.logger.info(i + ": entities-displayName: " + displayName);
 
-            //Namen holen und dann mit Store in Name hashmap speichern als value und dann mit id als key value wiederfinden
+            //Namen holen und dann mit BackupAnalyser.Store in Name hashmap speichern als value und dann mit id als key value wiederfinden
 
 
             Store.storeDataMediaC(j, idmediaCategory);
@@ -97,9 +99,9 @@ public class Parser {
         for (int i = 0; i < arr.length(); i++) {
 
             String id = arr.getJSONObject(i).getString("id");
-            Test1.logger.info(i + ": entities-id: " + id);
+            Main.logger.info(i + ": entities-id: " + id);
             String name = arr.getJSONObject(i).getString("name");
-            Test1.logger.info(i + ": entities-name: " + name);
+            Main.logger.info(i + ": entities-name: " + name);
 
             Store.storeDataMediaCategory(j, id);
             j++;
@@ -122,7 +124,7 @@ public class Parser {
 
             if (mfile.getName().equals("sounds")) {
 
-                Test1.logger.info("\nfound sounds");
+                Main.logger.info("\nfound sounds");
 
                 final String directorymediastoresounds = "/home/victoria/Temp/backup/mediastore/sounds";
                 File directorymediasounds = new File(directorymediastoresounds);
@@ -130,7 +132,7 @@ public class Parser {
 
                 for (File msfile : msoundsfList) {
 
-                    Test1.logger.info(msfile.getName());
+                    Main.logger.info(msfile.getName());
                     Store.storeDataMediaStore(j, msfile.getName());
                     j++;
                     k = j;
@@ -140,7 +142,7 @@ public class Parser {
 
             if (mfile.getName().equals("snapshots")) {
 
-                Test1.logger.info("\nfound snapshots");
+                Main.logger.info("\nfound snapshots");
 
                 final String directorymediastoresnap = "/home/victoria/Temp/backup/mediastore/snapshots/";
                 File directorymediasnap = new File(directorymediastoresnap);
@@ -148,7 +150,7 @@ public class Parser {
 
                 for (File mshfile : msnaphotfList) {
 
-                    Test1.logger.info(mshfile.getName());
+                    Main.logger.info(mshfile.getName());
                     Store.storeDataMediaStore(k, mshfile.getName());
                     k++;
 
