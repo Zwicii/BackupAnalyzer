@@ -1,10 +1,9 @@
-package BackupAnalyser;
+package analyser;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by victoria on 12.07.17.
+ * Vergleicht Einträge von 2 HasMaps ob sie gleich sind und speichert das Ergebnis in eine dritte HashMap
  */
 public class Compare {
 

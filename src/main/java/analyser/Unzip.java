@@ -1,4 +1,4 @@
-package BackupAnalyser;
+package analyser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-
 /**
- * Created by victoria on 11.07.17.
+ * entpackt Zipfiles
  */
 
 public class Unzip {
@@ -30,7 +29,7 @@ public class Unzip {
 
             int len;
             while ((len = zis.read(buffer)) > 0) {
-                fos.write(buffer, 0, len);
+                fos.write(buffer, 0, len); //buffer, Start, Stop
             }
             fos.close();
 

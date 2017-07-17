@@ -1,5 +1,9 @@
-package BackupAnalyser;
+package impl;
 
+import analyser.*;
+import analyser.MediaCategoryParser;
+import interfaces.BackupFileParser;
+import interfaces.JsonFileParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,11 +13,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Created by victoria on 11.07.17.
+ * Parsed backupfile
  */
-public class Parser {
+public class BackupFileParserImpl implements BackupFileParser {
 
-    public static void parseBackupFile(String directorybackup) {
+    private JsonFileParser jsonFileParserM = MediaParser.getInstance();
+    private JsonFileParser jsonFileParserMC = MediaCategoryParser.getInstance();
+
+    private static BackupFileParserImpl instance = null;
+
+    private BackupFileParserImpl() {
+    }
+
+    public static BackupFileParserImpl getInstance() {
+        if (instance == null) {
+            instance = new BackupFileParserImpl();
+        }
+        return instance;
+    }
+
+    public void parseBackupFile(String filePath) {
 
         String jsonDataMedia = null;
         String jsonDataMediaCategory = null;
@@ -27,7 +46,7 @@ public class Parser {
             e.printStackTrace();
         }
 
-        File directory = new File(directorybackup);
+        File directory = new File(filePath);
         //get all the files from a directory
         File[] fList = directory.listFiles();
 
@@ -38,77 +57,24 @@ public class Parser {
             if (file.getName().endsWith(".Media.json")) {
 
                 Main.logger.info("\nfound Media");
-                Parser.parseMedia(jsonDataMedia);
+
+                jsonFileParserM.parse(jsonDataMedia);
+//                BackupFileParserImpl.parseMedia(jsonDataMedia);
             }
 
             if (file.getName().endsWith(".MediaCategory.json")) {
                 Main.logger.info("\nfound MediaCategory");
-                Parser.parsemediaCategory(jsonDataMediaCategory);
+                jsonFileParserMC.parse(jsonDataMediaCategory);
+//                BackupFileParserImpl.parsemediaCategory(jsonDataMediaCategory);
             }
 
             if (file.getName().equals("mediastore")) {
                 Main.logger.info("\nfound mediastore");
-                Parser.parseMediaStore(directorymediastore);
+                BackupFileParserImpl.parseMediaStore(directorymediastore);
             }
         }
     }
 
-    public static void parseMedia(String jsonData) {
-        JSONObject obj = new JSONObject(jsonData);
-        int j = 0;
-        int k = 0;
-//        String deviceDescription = obj.getJSONObject("deviceDescription").getString("applicationName");
-//        Test1.logger.info("deviceDescription: " + deviceDescription);
-
-
-        JSONArray arr = obj.getJSONArray("entities");
-        for (int i = 0; i < arr.length(); i++) {
-
-            JSONObject objmediaCategory = arr.getJSONObject(i).getJSONObject("mediaCategory");
-            String idmediaCategory = objmediaCategory.getString("id");
-            Main.logger.info(i + ": mediaCategory-id: " + idmediaCategory);
-
-            String namemediaCategory = objmediaCategory.getString("name");
-            Main.logger.info(i + ": mediaCategory-name: " + namemediaCategory);
-
-            String id = arr.getJSONObject(i).getString("id");
-            Main.logger.info(i + ": entities-id: " + id);
-
-            String displayName = arr.getJSONObject(i).getString("displayName");
-            Main.logger.info(i + ": entities-displayName: " + displayName);
-
-            //Namen holen und dann mit BackupAnalyser.Store in Name hashmap speichern als value und dann mit id als key value wiederfinden
-
-
-            Store.storeDataMediaC(j, idmediaCategory);
-            j++;
-            Store.storeDataMediaC(j, namemediaCategory);
-            j++;
-            Store.storeDataMediaS(k, id);
-            k++;
-
-        }
-    }
-
-    public static void parsemediaCategory(String jsonData) {
-
-        JSONObject obj = new JSONObject(jsonData);
-        int j = 0;
-
-        JSONArray arr = obj.getJSONArray("entities");
-        for (int i = 0; i < arr.length(); i++) {
-
-            String id = arr.getJSONObject(i).getString("id");
-            Main.logger.info(i + ": entities-id: " + id);
-            String name = arr.getJSONObject(i).getString("name");
-            Main.logger.info(i + ": entities-name: " + name);
-
-            Store.storeDataMediaCategory(j, id);
-            j++;
-            Store.storeDataMediaCategory(j, name);
-            j++;
-        }
-    }
 
     public static void parseMediaStore(String directorymediastore) {
 
@@ -157,5 +123,6 @@ public class Parser {
                 }
             }
         }
+
     }
 }

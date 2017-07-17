@@ -1,11 +1,9 @@
-package BackupAnalyser;
-
-import BackupAnalyser.Main;
+package analyser;
 
 import java.util.HashMap;
 
 /**
- * Created by victoria on 11.07.17.
+ * Speichert Daten in Mashmaps
  */
 public class Store {
 

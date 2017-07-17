@@ -1,30 +1,25 @@
-package Server;
+package server;
 
-import io.undertow.Handlers;
 import io.undertow.Undertow;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
-import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.PathResourceManager;
-import io.undertow.servlet.api.DeploymentInfo;
-import io.undertow.util.Headers;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
-import org.jboss.resteasy.spi.ResteasyDeployment;
 
-import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static io.undertow.Handlers.resource;
+import static java.util.Arrays.asList;
 
-/**
- * Created by victoria on 14.07.17.
- */
+
 public class ServerRunner {
 
     private final UndertowJaxrsServer server = new UndertowJaxrsServer();
 
     /**
-     * Startet Undertow Server auf übergebenen Port
+     * Startet Undertow server auf übergebenen Port
      */
 //    @Override
     public void start(Integer port) {
@@ -35,10 +30,34 @@ public class ServerRunner {
         server.deploy(ResourceMapper.class, "/api");
 
         server.addResourcePrefixPath("/",
-                resource(new PathResourceManager(Paths.get("/"),100))
+                resource(new PathResourceManager(Paths.get("/"), 100))
                         .addWelcomeFiles("index.html"));
 
         server.start(serverBuilder);
+
+        List<URL> urls;
+        ClassLoader classLoader = ServerRunner.class.getClassLoader();
+        if (classLoader instanceof URLClassLoader) {
+            URLClassLoader urlClassLoader = (URLClassLoader) classLoader;
+            urls = asList(urlClassLoader.getURLs());
+            urls.stream()
+                    .filter(url -> !url.toString().endsWith(".jar"))
+                    .filter(url -> url.toString().contains("resources"))
+                    .map(url -> {
+                        try {
+                            return Paths.get(url.toURI());
+                        } catch (URISyntaxException e) {
+                            return null;
+                        }
+                    })
+                    .findFirst()
+                    .ifPresent(path -> {
+
+                        server.addResourcePrefixPath("/",
+                                resource(new PathResourceManager(Paths.get(path.toString()), 100))
+                                        .addWelcomeFiles("index.html"));
+                    });
+        }
 
 //        UndertowJaxrsServer server = new UndertowJaxrsServer();
 //
