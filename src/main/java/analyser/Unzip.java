@@ -25,6 +25,7 @@ public class Unzip {
         while (zipEntry != null) {
             String fileName = zipEntry.getName();
             File newFile = new File(destination + fileName);
+            newFile.getParentFile().mkdirs();
             FileOutputStream fos = new FileOutputStream(newFile);
 
             int len;
@@ -39,11 +40,13 @@ public class Unzip {
                 unzip(backupfile, destination);
             }
 
-            zipEntry = zis.getNextEntry();
 
+            zipEntry = zis.getNextEntry();
         }
         zis.closeEntry();
         zis.close();
 
     }
 }
+
+

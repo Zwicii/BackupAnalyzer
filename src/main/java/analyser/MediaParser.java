@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Created by victoria on 17.07.17.
+ * parse com.commend.platform.mediastore.Media.json
  */
 public class MediaParser implements JsonFileParser {
 
@@ -43,9 +43,6 @@ public class MediaParser implements JsonFileParser {
 
             String id = arr.getJSONObject(i).getString("id");
             Main.logger.info(i + ": entities-id: " + id);
-
-            String displayName = arr.getJSONObject(i).getString("displayName");
-            Main.logger.info(i + ": entities-displayName: " + displayName);
 
             Store.storeDataMediaC(j, idmediaCategory);
             j++;

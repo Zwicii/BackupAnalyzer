@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Created by victoria on 17.07.17.
+ * parse com.commend.platform.mediastore.MediaCategory.json
  */
 public class MediaCategoryParser implements JsonFileParser {
 
