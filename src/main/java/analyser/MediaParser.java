@@ -145,8 +145,8 @@ public class MediaParser implements JsonFileParser {
                 }
             }
 
-            for (int l = 0; l < MediaStoreParser.hashMapMediaStore.size(); l++) {
-                if (arr[i].equals(MediaStoreParser.hashMapMediaStore.get(l))) {
+            for (int j = 0; j < MediaStoreParser.hashMapMediaStore.size(); j++) {
+                if (arr[i].equals(MediaStoreParser.hashMapMediaStore.get(j))) {
                     Main.logger.info(MediaParser.hashMapCompareData.get(i) + ": OK");
                     found = true;
                     hashMapCompareMedia.put(arr[i], found);
