@@ -24,6 +24,32 @@ public class Main {
         String destination = "/home/victoria/Temp/";
         Path winPath = Paths.get("/home/victoria/Downloads/presets.zip/");
 
+        //        for (HashMap.Entry<String, HashMap> entry : hashMapCheck.entrySet()) {
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            Main.logger.info("\nKey: " + key);
+//
+//
+//            if (key.equals("com.commend.platform.mediastore.MediaCategory")) {
+//                for (HashMap.Entry<String, Boolean> entryMC : hashMapMC.entrySet()) {
+//
+//                    String keyMC = entryMC.getKey();
+//                    Boolean valueMC = entryMC.getValue();
+//                    Main.logger.info(keyMC + ": " + valueMC);
+//                }
+//            }
+//
+//            if (key.equals("com.commend.platform.mediastore.Media")) {
+//                for (HashMap.Entry<String, Boolean> entryMF : hashMapMF.entrySet()) {
+//
+//                    String keyMF = entryMF.getKey();
+//                    Boolean valueMF = entryMF.getValue();
+//                    Main.logger.info(keyMF + ": " + valueMF);
+//                }
+//            }
+//
+//        }
+
 //        analyser.Unzip.unzip(fileZip, destination);
 //        readZipFile1(winPath);
 //        extractZipFileUsingUnixFileSystem();
@@ -36,10 +62,10 @@ public class Main {
 //        BackupFileParserImpl.parseBackupFile(directory);
 //
 //        logger.info("\nanalyser.Compare MediaCategory");
-//        Compare.compare(Store.hashMapMediaC, Store.hashMapmediaCategory, Compare.hashMapMC);
+//        Compare.compareMedia(Store.hashMapMediaC, Store.hashMapMediaCategory, Compare.hashMapMC);
 //
 //        logger.info("\nanalyser.Compare Mediastore");
-//        Compare.compare(Store.hashMapMediaS, Store.hashMapMediaStore, Compare.hashMapMF);
+//        Compare.compareMedia(Store.hashMapMediaS, Store.hashMapMediaStore, Compare.hashMapMF);
 //
 //        logger.info("\nCheck");
 //        Compare.check();

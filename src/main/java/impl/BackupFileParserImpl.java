@@ -36,10 +36,12 @@ public class BackupFileParserImpl implements BackupFileParser {
         String jsonDataMedia = null;
         String jsonDataMediaCategory = null;
         final String directorymediastore = "/home/victoria/Temp/mediastore/";
+        String filePathMC = "/home/victoria/Temp/com.commend.platform.mediastore.MediaCategory.json/";
+        String filePathM = "/home/victoria/Temp/com.commend.platform.mediastore.Media.json/";
 
         try {
+
             jsonDataMedia = new String(Files.readAllBytes(Paths.get("/home/victoria/Temp/com.commend.platform.mediastore.Media.json/")));
-            jsonDataMediaCategory = new String(Files.readAllBytes(Paths.get("/home/victoria/Temp/com.commend.platform.mediastore.MediaCategory.json/")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,24 +55,33 @@ public class BackupFileParserImpl implements BackupFileParser {
 
 //            Test1.logger.info(file.getName());
 
-            if (file.getName().endsWith(".Media.json")) {
-
-                Main.logger.info("\nfound Media");
-
-                jsonFileParserM.parse(jsonDataMedia);
-//                BackupFileParserImpl.parseMedia(jsonDataMedia);
-            }
-
             if (file.getName().endsWith(".MediaCategory.json")) {
                 Main.logger.info("\nfound MediaCategory");
-                jsonFileParserMC.parse(jsonDataMediaCategory);
+                jsonFileParserMC.parse(filePathMC);
 //                BackupFileParserImpl.parsemediaCategory(jsonDataMediaCategory);
+
             }
 
             if (file.getName().equals("mediastore")) {
                 Main.logger.info("\nfound mediastore");
                 jsonFileParserMS.parse(directorymediastore);
+
             }
+
+        }
+
+        for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
+
+//            Test1.logger.info(file.getName());
+
+            if (file.getName().endsWith(".Media.json")) {
+
+                Main.logger.info("\nfound Media");
+
+                jsonFileParserM.parse(filePathM);
+//                BackupFileParserImpl.parseMedia(jsonDataMedia);
+            }
+
         }
     }
 

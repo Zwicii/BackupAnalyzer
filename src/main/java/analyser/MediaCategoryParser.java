@@ -1,8 +1,17 @@
 package analyser;
 
 import interfaces.JsonFileParser;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * parse com.commend.platform.mediastore.MediaCategory.json
@@ -10,6 +19,8 @@ import org.json.JSONObject;
 public class MediaCategoryParser implements JsonFileParser {
 
     private static MediaCategoryParser instance = null;
+    public static HashMap<Integer, String> hashMapMediaCategory = new HashMap<>();
+
 
     private MediaCategoryParser() {
     }
@@ -23,21 +34,55 @@ public class MediaCategoryParser implements JsonFileParser {
 
     @Override
     public void parse(String filePath) {
-        JSONObject obj = new JSONObject(filePath);
         int j = 0;
 
-        JSONArray arr = obj.getJSONArray("entities");
-        for (int i = 0; i < arr.length(); i++) {
+        File fileName = new File(filePath);
 
-            String id = arr.getJSONObject(i).getString("id");
-            Main.logger.info(i + ": entities-id: " + id);
-            String name = arr.getJSONObject(i).getString("name");
-            Main.logger.info(i + ": entities-name: " + name);
+        try {
 
-            Store.storeDataMediaCategory(j, id);
-            j++;
-            Store.storeDataMediaCategory(j, name);
-            j++;
+            ObjectMapper mapper = new ObjectMapper();
+
+            // read JSON from a file
+            Map<String, Object> map = mapper.readValue(
+                    new File(filePath),
+                    new TypeReference<Map<String, Object>>() {
+                    });
+
+            System.out.println(map.get("entities"));
+
+            if (map.get("entities") instanceof ArrayList) {
+
+                ArrayList arrayList = (ArrayList) map.get("entities");
+
+                for (int i = 0; i < arrayList.size(); i++) {
+
+                    Main.logger.info(arrayList.get(i));
+
+                    if (arrayList.get(i) instanceof LinkedHashMap) {
+
+                        LinkedHashMap<Object, Object> hashMap = (LinkedHashMap<Object, Object>) arrayList.get(i);
+                        String id = (String) hashMap.get("id");
+                        Main.logger.info("id: " + id);
+                        String name = (String) hashMap.get("name");
+                        Main.logger.info("name: " + name);
+
+                        Store.storeData(j, id, hashMapMediaCategory);
+                        j++;
+                        Store.storeData(j, name, hashMapMediaCategory);
+                        j++;
+                    }
+                }
+            }
+
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        Store.storeOriginalData( fileName.getName(), hashMapMediaCategory);
     }
+
 }

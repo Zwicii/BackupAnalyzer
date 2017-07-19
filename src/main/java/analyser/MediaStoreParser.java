@@ -3,6 +3,7 @@ package analyser;
 import interfaces.JsonFileParser;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * parse directoy mediastore
@@ -10,6 +11,7 @@ import java.io.File;
 public class MediaStoreParser implements JsonFileParser {
 
     private static MediaStoreParser instance = null;
+    public static HashMap<Integer, String> hashMapMediaStore = new HashMap<>();
 
     private MediaStoreParser() {
     }
@@ -26,10 +28,10 @@ public class MediaStoreParser implements JsonFileParser {
     public void parse(String filePath) {
         int j = 0;
         int k = 0;
-        File directorymedia = new File(filePath);
-        File[] mfList = directorymedia.listFiles();
+        File directoryMS = new File(filePath);
+        File[] MSfList = directoryMS.listFiles();
 
-        for (File mfile : mfList) {
+        for (File mfile : MSfList) {
 
 //                    System.out.println(mfile.getName());
 
@@ -38,14 +40,14 @@ public class MediaStoreParser implements JsonFileParser {
 
                 Main.logger.info("\nfound sounds");
 
-                final String directorymediastoresounds = filePath + "sounds";
-                File directorymediasounds = new File(directorymediastoresounds);
-                File[] msoundsfList = directorymediasounds.listFiles();
+                final String soundsPath = filePath + "sounds";
+                File directoryMSsounds = new File(soundsPath);
+                File[] MSsoundsfList = directoryMSsounds.listFiles();
 
-                for (File msfile : msoundsfList) {
+                for (File msfile : MSsoundsfList) {
 
                     Main.logger.info(msfile.getName());
-                    Store.storeDataMediaStore(j, msfile.getName());
+                    Store.storeData(j, msfile.getName(), hashMapMediaStore);
                     j++;
                     k = j;
 
@@ -56,18 +58,19 @@ public class MediaStoreParser implements JsonFileParser {
 
                 Main.logger.info("\nfound snapshots");
 
-                final String directorymediastoresnap = filePath + "snapshots";
-                File directorymediasnap = new File(directorymediastoresnap);
-                File[] msnaphotfList = directorymediasnap.listFiles();
+                final String snapshotsPath = filePath + "snapshots";
+                File directoryMSsnapshots = new File(snapshotsPath);
+                File[] MSsnapshotsList = directoryMSsnapshots.listFiles();
 
-                for (File mshfile : msnaphotfList) {
+                for (File mshfile : MSsnapshotsList) {
 
                     Main.logger.info(mshfile.getName());
-                    Store.storeDataMediaStore(k, mshfile.getName());
+                    Store.storeData(k, mshfile.getName(), hashMapMediaStore);
                     k++;
-
                 }
             }
         }
+
+        Store.storeOriginalData(directoryMS.getName(), hashMapMediaStore);
     }
 }
