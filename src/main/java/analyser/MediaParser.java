@@ -99,8 +99,6 @@ public class MediaParser implements JsonFileParser {
         }
 
 
-
-
     }
 
     public static void compareMedia(Map<String, Object> map) {
@@ -124,7 +122,7 @@ public class MediaParser implements JsonFileParser {
                     k++;
 
                     LinkedHashMap<Object, Object> hashMapMC = (LinkedHashMap<Object, Object>) hashMapM.get("mediaCategory");
-                    arr[k]  = (String) hashMapMC.get("id");
+                    arr[k] = (String) hashMapMC.get("id");
                     k++;
 
                     arr[k] = (String) hashMapMC.get("name");
