@@ -21,6 +21,7 @@ public class ServerRunner {
     /**
      * Startet Undertow server auf übergebenen Port
      */
+    // TODO [STC]: Auskommentierten (alten) Code entfernen
 //    @Override
     public void start(Integer port) {
         //IP Adresse von Rechner kann auch verwendet werden
@@ -40,6 +41,12 @@ public class ServerRunner {
         if (classLoader instanceof URLClassLoader) {
             URLClassLoader urlClassLoader = (URLClassLoader) classLoader;
             urls = asList(urlClassLoader.getURLs());
+            // TODO [STC]: Weitere Beispiele/Tutorials zu Streams und Lambda Expressions in Java ansehen
+            // z.B.:    https://www.youtube.com/watch?v=Hl5XLAtpRog
+            //          https://www.youtube.com/watch?v=9Orn0Pwp3YU
+            //          https://www.youtube.com/watch?v=8pDm_kH4YKY
+            //          http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/
+            // TODO [STC]: Diesen Code-Block verstehen und gut kommentieren
             urls.stream()
                     .filter(url -> !url.toString().endsWith(".jar"))
                     .filter(url -> url.toString().contains("resources"))
@@ -59,6 +66,7 @@ public class ServerRunner {
                     });
         }
 
+        // TODO [STC]: Auskommentierten (alten) Code entfernen
 //        UndertowJaxrsServer server = new UndertowJaxrsServer();
 //
 //        ResteasyDeployment deployment = new ResteasyDeployment();
@@ -81,6 +89,7 @@ public class ServerRunner {
     }
 
 
+    // TODO [STC]: Auskommentierten (alten) Code entfernen
     //    @Override
     public void stop() {
         server.stop();

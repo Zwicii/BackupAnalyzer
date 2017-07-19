@@ -22,8 +22,10 @@ import java.util.Map;
  * REST Interface für Nutzer um über HTTP auf Daten zugreifen zu können
  */
 @Path("/test")
+// TODO [STC]: Diesse Klasse umbenennen (z.B.: BackupAnalyzerResource (oder etwas anderes sprechendes)
 public class TestResource {
 
+    // TODO [STC]: Versuchen, anstatt "/home/victoria" das Home-Verzeichnis des aktuellen Users dynamisch herauszubekommen
     private final String destinationPath = "/home/victoria/Temp/";
 
     private BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
@@ -31,6 +33,7 @@ public class TestResource {
     public TestResource() throws IOException {
     }
 
+    // TODO [STC]: Auskommentierten (alten) Code entfernen
 //    UserService userService = UserServiceImpl.getInstance();
 //    ObjectMapper mapper = new ObjectMapper();
 
@@ -52,6 +55,8 @@ public class TestResource {
         return "{\"asdf\": true}";
     }
 
+    // TODO [STC]: Neue Methoden (REST Endpoints) anlegen zum Auslesen der hashMapOriginalData und hashMapCheckResults aus dem Store (im JSON Format, für Fabian später)
+
     @POST
     @Path("/upload")
     @Consumes("multipart/form-data")
@@ -60,6 +65,7 @@ public class TestResource {
         String fileName = "";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+        // TODO [STC]: Dazu kommentieren, wo der Name "datei" herkommt bzw. womit er zusammenhängt
         List<InputPart> inputParts = uploadForm.get("datei");
 
         for (InputPart inputPart : inputParts) {
@@ -79,9 +85,11 @@ public class TestResource {
 
                 writeFile(bytes, fileName);
 
+                // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
                 System.out.println("Unzip");
                 Unzip.unzip(fileName, destinationPath);
 
+                // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
                 System.out.println("Parse");
                 backupFileParser.parseBackupFile(destinationPath);
 

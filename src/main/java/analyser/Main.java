@@ -16,6 +16,7 @@ public class Main {
 
     public static final Logger logger = LogManager.getLogger(Main.class);
 
+    // TODO [STC]: Diese Funktion entfernen; sie wird nirgendwo mehr verwendet und beinhaltet eigentlich nur noch alten Code
     public static void getLoggerEntries() throws IOException {
 
         //        logger.info("Gradle Test");
