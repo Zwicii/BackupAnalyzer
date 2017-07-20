@@ -37,10 +37,6 @@ public class MediaStoreParser implements JsonFileParser {
 
         for (File mfile : MSfList) {
 
-            // TODO [STC]: Auskommentierten (alten) Code entfernen
-//                    System.out.println(mfile.getName());
-
-
             if (mfile.getName().equals("sounds")) {
 
                 Main.logger.info("\nfound sounds");
@@ -55,7 +51,6 @@ public class MediaStoreParser implements JsonFileParser {
                     Store.storeData(j, msfile.getName(), hashMapMediaStore);
                     j++;
                     k = j;
-
                 }
             }
 

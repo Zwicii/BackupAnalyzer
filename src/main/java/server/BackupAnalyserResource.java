@@ -1,5 +1,6 @@
 package server;
 
+import analyser.Main;
 import impl.BackupFileParserImpl;
 import impl.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
@@ -23,23 +24,17 @@ import java.util.Map;
  * REST Interface für Nutzer um über HTTP auf Daten zugreifen zu können
  */
 @Path("/test")
-// TODO [STC]: Diesse Klasse umbenennen (z.B.: BackupAnalyzerResource (oder etwas anderes sprechendes)
-public class TestResource {
+public class BackupAnalyserResource {
 
     // TODO [STC]: Versuchen, anstatt "/home/victoria" das Home-Verzeichnis des aktuellen Users dynamisch herauszubekommen
     private String destinationPathUnzip = "/home/victoria/Temp/";
-    private final String destinationPathZip = "/home/victoria/Temp/";
+    private final String destinationPathZip = "/home/victoria/Temp/OUT/";
 
     private BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
     private ZipFileService zipFileService = ZipFileServiceImpl.getInstance();
 
-    public TestResource() throws IOException {
+    public BackupAnalyserResource() throws IOException {
     }
-
-    // TODO [STC]: Auskommentierten (alten) Code entfernen
-//    UserService userService = UserServiceImpl.getInstance();
-//    ObjectMapper mapper = new ObjectMapper();
-
     /**
      * Test-Methode um funktionierende Kommunikation aufbauen zu können
      */
@@ -69,7 +64,7 @@ public class TestResource {
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         // TODO [STC]: Dazu kommentieren, wo der Name "datei" herkommt bzw. womit er zusammenhängt
-        List<InputPart> inputParts = uploadForm.get("datei");
+        List<InputPart> inputParts = uploadForm.get("datei"); //datei = name von Input von Index.html
 
         for (InputPart inputPart : inputParts) {
 
@@ -85,34 +80,30 @@ public class TestResource {
 
                 //constructs upload file path
                 fileNameUnzip = destinationPathUnzip + fileNameUnzip;
-                String fileNameZip = destinationPathZip + "backup.zip";
-
+                String fileNameZip = "/home/victoria/Temp/backup/backup.zip";
 
                 writeFile(bytes, fileNameUnzip);
 
                 // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
-                System.out.println("Unzip");
+                Main.logger.info("Unzip");
                 File newDir = new File(destinationPathUnzip + "IN"); //new directory IN
                 newDir.mkdir();
                 destinationPathUnzip = newDir.getPath() + "/";
                 zipFileService.unzip(fileNameUnzip, destinationPathUnzip);
 
                 // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
-                System.out.println("Parse");
+                Main.logger.info("Parse");
                 backupFileParser.parseBackupFile(destinationPathUnzip);
 
                 zipFileService.zip(fileNameZip, destinationPathZip);
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         return Response.status(200)
                 .entity("{}").build();
-
     }
 
     private String getFileName(MultivaluedMap<String, String> header) {
@@ -144,7 +135,5 @@ public class TestResource {
         fop.write(content);
         fop.flush();
         fop.close();
-
     }
 }
-

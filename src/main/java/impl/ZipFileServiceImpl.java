@@ -1,20 +1,18 @@
 package impl;
 
+import analyser.Main;
 import analyser.Store;
 import interfaces.ZipFileService;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -37,10 +35,8 @@ public class ZipFileServiceImpl implements ZipFileService {
         return instance;
     }
 
-
     @Override
     public void unzip(String fileZip, String destPath) {
-
 
         try {
 
@@ -68,7 +64,6 @@ public class ZipFileServiceImpl implements ZipFileService {
                     unzip(backupFile, destPath);
                 }
 
-
                 zipEntry = zis.getNextEntry();
             }
             zis.closeEntry();
@@ -84,15 +79,14 @@ public class ZipFileServiceImpl implements ZipFileService {
     @Override
     public void zip(String File, String destPath) {
 
-        File newDir = new File(destPath + "OUT");
+        File newDir = new File(destPath);
         newDir.mkdir();
-        destPath = newDir.getPath() + "/";
+//        destPath = newDir.getPath() + "/";
         String srcPathCopy = "/home/victoria/Temp/IN/";
 
         String[] arrKey = new String[1000];
         int k = 0;
         int l = 0;
-
 
         try {
 
@@ -106,7 +100,6 @@ public class ZipFileServiceImpl implements ZipFileService {
                     k++;
                 }
             }
-
 
             File IN = new File(srcPathCopy);
             File[] filesIN = IN.listFiles();
@@ -128,63 +121,69 @@ public class ZipFileServiceImpl implements ZipFileService {
             File backup = new File("/home/victoria/Temp/backup");
             backup.mkdir();
 
-            ZipUtil.pack(new File(destPath), new File("/home/victoria/Temp/backup/backup.zip")); //Zip backup.zip in backup directory
+            zipFile(File, destPath);
+
+//            ZipUtil.pack(new File(destPath), new File("/home/victoria/Temp/backup/backup.zip")); //Zip backup.zip in backup directory
 
             //Checksum berechnen
+//            calculateChecksum();
+//
+//            String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex("/home/victoria/Temp/backupaudio.bak/backup.zip");
+//            PrintWriter out = new PrintWriter("/home/victoria/Temp/backup/md5.txt");
+//            out.write(md5);
+//            out.close();
 
-            String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex("/home/victoria/Temp/backupaudio.bak/backup.zip");
-            PrintWriter out = new PrintWriter("/home/victoria/Temp/backup/md5.txt");
-            out.write(md5);
-            out.close();
+//            ZipUtil.pack(new File("/home/victoria/Temp/backup"), new File("/home/victoria/Temp/backup.bak")); //Zip backup.zip in backup directory
 
-            ZipUtil.pack(new File("/home/victoria/Temp/backup"), new File("/home/victoria/Temp/backup.bak")); //Zip backup.zip in backup directory
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void zipFile(String File, String destPath) {
+        File destFile = new File(destPath);
+        File[] files = destFile.listFiles();
 
-//            File destFile = new File(destPath);
-//            File[] files = destFile.listFiles();
+        try {
+            FileOutputStream fos = new FileOutputStream(File);
+            ZipOutputStream zos = new ZipOutputStream(fos);
 
-//            FileOutputStream fos = new FileOutputStream(File);
-//            ZipOutputStream zos = new ZipOutputStream(fos);
-//
-//            System.out.println("Adding directory: " + destFile.getName());
-//
-//            for (int i = 0; i < files.length; i++) {
-//                // if the file is directory, use recursion
-//
-//                if (files[i].isDirectory()) {
-//
-//                    ZipUtil.pack(new File(destPath + files[i].getName()), new File(destPath + files[i].getName() + "zip"));
-////                    String fileZip =files[i].getName();
-////                    String destinationPath = destination + files[i].getName();
-////
-//////                    zip(fileZip, destinationPath);
-//
-//                    continue;
-//
-//                }
-//
-//                System.out.println("tAdding file: " + files[i].getName());
-//
-//                // create byte buffer
-//                byte[] buffer = new byte[1024];
-//
-//                FileInputStream fis = new FileInputStream(files[i]);
-//                zos.putNextEntry(new ZipEntry(files[i].getName()));
-//
-//                int length;
-//
-//                while ((length = fis.read(buffer)) > 0) {
-//
-//                    zos.write(buffer, 0, length);
-//                }
-//
-//                zos.closeEntry();
-//
-//                // close the InputStream
-//                fis.close();
-//            }
-//            zos.close();
+            Main.logger.info("Adding directory: " + destFile.getName());
 
+            for (int i = 0; i < files.length; i++) {
+                // if the file is directory, use recursion
+
+                if (files[i].isDirectory()) {
+
+                    String fileZip = File + "/" + files[i].getName();
+                    String destinationPath = destPath + "/" + files[i].getName();
+                    zipFile(fileZip, destinationPath);
+                    continue;
+                }
+
+                Main.logger.info("tAdding file: " + files[i].getName());
+
+                // create byte buffer
+                byte[] buffer = new byte[1024];
+
+                FileInputStream fis = new FileInputStream(files[i]);
+                zos.putNextEntry(new ZipEntry(files[i].getName()));
+
+                int length;
+
+                while ((length = fis.read(buffer)) > 0) {
+
+                    zos.write(buffer, 0, length);
+                }
+
+                zos.closeEntry();
+
+                // close the InputStream
+                fis.close();
+            }
+            zos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -194,21 +193,13 @@ public class ZipFileServiceImpl implements ZipFileService {
 
     public String calculateChecksum() {
 
-        MessageDigest md = null;
-
         try {
-            md = MessageDigest.getInstance("MD5");
 
-            FileInputStream fis = new FileInputStream("/home/victoria/Temp/backup/backup.zip");
+            String yourString = "/home/victoria/Temp/IN/backup.zip";
+            byte[] bytesOfMessage = Files.readAllBytes(Paths.get(yourString));
 
-            byte[] dataBytes = new byte[1024];
-
-            int nread = 0;
-            while ((nread = fis.read(dataBytes)) != -1) {
-                md.update(dataBytes, 0, nread);
-            }
-            ;
-            byte[] mdbytes = md.digest();
+            MessageDigest md = MessageDigest.getInstance("MD5");            //2.514.217
+            byte[] mdbytes = md.digest(bytesOfMessage);
 
             //convert the byte to hex format method 1
             StringBuffer sb = new StringBuffer();
@@ -216,16 +207,16 @@ public class ZipFileServiceImpl implements ZipFileService {
                 sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
             }
 
-            System.out.println("Digest(in hex format):: " + sb.toString());
+            Main.logger.info("Digest(in hex format): " + sb.toString());
+
+            return sb.toString();
+
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return "";
+        return null;
     }
 }
 

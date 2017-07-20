@@ -25,7 +25,6 @@ public class MediaCategoryParser implements JsonFileParser {
     // Vorschlag: zusätzliche Funktion im Store namens getMediaCategory(...)
     public static HashMap<Integer, String> hashMapMediaCategory = new HashMap<>();
 
-
     private MediaCategoryParser() {
     }
 
@@ -53,7 +52,7 @@ public class MediaCategoryParser implements JsonFileParser {
                     });
 
             // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
-            System.out.println(map.get("entities"));
+            Main.logger.info(map.get("entities"));
 
             // TODO [STC]: Überlegen, ob du diesen ganzen Code-Block überhaupt noch brauchst. Ohne den letzten Teil mit Store.storeData(...) (der wegfallen sollte, siehe erstes TODO) sind das hier nur Log Ausgaben, die man evtl. weglassen könnte.
             if (map.get("entities") instanceof ArrayList) {
@@ -91,5 +90,4 @@ public class MediaCategoryParser implements JsonFileParser {
 
         Store.storeOriginalData(fileName.getName(), hashMapMediaCategory);
     }
-
 }

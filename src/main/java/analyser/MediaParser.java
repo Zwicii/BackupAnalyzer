@@ -36,7 +36,6 @@ public class MediaParser implements JsonFileParser {
         return instance;
     }
 
-
     @Override
     public void parse(String filePath) {
         int j = 0;
@@ -103,8 +102,6 @@ public class MediaParser implements JsonFileParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void compareMedia(Map<String, Object> map) {
@@ -133,7 +130,6 @@ public class MediaParser implements JsonFileParser {
 
                     arr[k] = (String) hashMapMC.get("name");
                     k++;
-
                 }
             }
         }

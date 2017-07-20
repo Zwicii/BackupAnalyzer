@@ -43,37 +43,23 @@ public class BackupFileParserImpl implements BackupFileParser {
 
         for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
 
-//            Test1.logger.info(file.getName());
-
             if (file.getName().endsWith(".MediaCategory.json")) {
                 Main.logger.info("\nfound MediaCategory");
                 jsonFileParserMC.parse(filePathMC);
-//                BackupFileParserImpl.parsemediaCategory(jsonDataMediaCategory);
-
             }
 
             if (file.getName().equals("mediastore")) {
                 Main.logger.info("\nfound mediastore");
                 jsonFileParserMS.parse(directoryMediaStore);
-
             }
-
         }
 
         for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
 
-//            Test1.logger.info(file.getName());
-
             if (file.getName().endsWith(".Media.json")) {
-
                 Main.logger.info("\nfound Media");
-
                 jsonFileParserM.parse(filePathM);
-//                BackupFileParserImpl.parseMedia(jsonDataMedia);
             }
-
         }
     }
-
-
 }

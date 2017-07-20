@@ -9,7 +9,7 @@ public class ResourceMapper extends Application {
 
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new LinkedHashSet<>(); //sowie HashMap nur ohne key
-        resources.add(TestResource.class);
+        resources.add(BackupAnalyserResource.class);
 
         return resources;
     }
