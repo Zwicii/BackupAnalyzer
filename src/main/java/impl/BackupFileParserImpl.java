@@ -33,19 +33,9 @@ public class BackupFileParserImpl implements BackupFileParser {
 
     public void parseBackupFile(String filePath) {
 
-        String jsonDataMedia = null;
-        String jsonDataMediaCategory = null;
-        final String directorymediastore = "/home/victoria/Temp/mediastore/";
-        String filePathMC = "/home/victoria/Temp/com.commend.platform.mediastore.MediaCategory.json/";
-        String filePathM = "/home/victoria/Temp/com.commend.platform.mediastore.Media.json/";
-
-        try {
-
-            jsonDataMedia = new String(Files.readAllBytes(Paths.get("/home/victoria/Temp/com.commend.platform.mediastore.Media.json/")));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String directoryMediaStore = "/home/victoria/Temp/IN/mediastore/";
+        String filePathMC = "/home/victoria/Temp/IN/com.commend.platform.mediastore.MediaCategory.json/";
+        String filePathM = "/home/victoria/Temp/IN/com.commend.platform.mediastore.Media.json/";
 
         File directory = new File(filePath);
         //get all the files from a directory
@@ -64,7 +54,7 @@ public class BackupFileParserImpl implements BackupFileParser {
 
             if (file.getName().equals("mediastore")) {
                 Main.logger.info("\nfound mediastore");
-                jsonFileParserMS.parse(directorymediastore);
+                jsonFileParserMS.parse(directoryMediaStore);
 
             }
 

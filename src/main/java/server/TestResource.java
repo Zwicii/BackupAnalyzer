@@ -1,8 +1,9 @@
 package server;
 
-import analyser.Unzip;
 import impl.BackupFileParserImpl;
+import impl.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
+import interfaces.ZipFileService;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -24,9 +25,12 @@ import java.util.Map;
 @Path("/test")
 public class TestResource {
 
-    private final String destinationPath = "/home/victoria/Temp/";
+    private String destinationPathUnzip = "/home/victoria/Temp/";
+    private final String destinationPathZip = "/home/victoria/Temp/";
+
 
     private BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
+    private ZipFileService zipFileService = ZipFileServiceImpl.getInstance();
 
     public TestResource() throws IOException {
     }
@@ -57,7 +61,7 @@ public class TestResource {
     @Consumes("multipart/form-data")
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(MultipartFormDataInput input) {
-        String fileName = "";
+        String fileNameUnzip = "";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<InputPart> inputParts = uploadForm.get("datei");
@@ -67,7 +71,7 @@ public class TestResource {
             try {
 
                 MultivaluedMap<String, String> header = inputPart.getHeaders();
-                fileName = getFileName(header);
+                fileNameUnzip = getFileName(header);
 
                 //convert the uploaded file to inputstream
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
@@ -75,15 +79,22 @@ public class TestResource {
                 byte[] bytes = IOUtils.toByteArray(inputStream);
 
                 //constructs upload file path
-                fileName = destinationPath + fileName;
+                fileNameUnzip = destinationPathUnzip + fileNameUnzip;
+                String fileNameZip = destinationPathZip + "backup.zip";
 
-                writeFile(bytes, fileName);
+
+                writeFile(bytes, fileNameUnzip);
 
                 System.out.println("Unzip");
-                Unzip.unzip(fileName, destinationPath);
+                File newDir = new File(destinationPathUnzip + "IN"); //new directory IN
+                newDir.mkdir();
+                destinationPathUnzip = newDir.getPath() + "/";
+                zipFileService.unzip(fileNameUnzip, destinationPathUnzip);
 
                 System.out.println("Parse");
-                backupFileParser.parseBackupFile(destinationPath);
+                backupFileParser.parseBackupFile(destinationPathUnzip);
+
+                zipFileService.zip(fileNameZip, destinationPathZip);
 
 
             } catch (IOException e) {
