@@ -7,6 +7,7 @@ import java.util.HashMap;
  */
 public class Store {
 
+    // TODO [STC]: Auskommentierten (alten) Code entfernen
 //    public static HashMap<Integer, String> hashMapMediaC = new HashMap<>();
 //    public static HashMap<Integer, String> hashMapMediaS = new HashMap<>();
 
@@ -25,6 +26,7 @@ public class Store {
         Main.logger.info("Key: " + key + " " + "Value: " + value);
     }
 
+    // TODO [STC]: Methode generell entfernen, anstattdessen .put(...) direkt dort verwenden, wo die entsprechende HashMap herkommt
     public static void storeData(int key, String value, HashMap<Integer, String> hashMap) {
 
         hashMap.put(key, value);

@@ -19,6 +19,10 @@ import java.util.Map;
 public class MediaCategoryParser implements JsonFileParser {
 
     private static MediaCategoryParser instance = null;
+
+    // TODO [STC]: Diese Liste entfernen (nicht nötig)
+    // Anstattdessen direkt die entsprechende Sub-Liste aus Store.hashMapOriginalData verwenden;
+    // Vorschlag: zusätzliche Funktion im Store namens getMediaCategory(...)
     public static HashMap<Integer, String> hashMapMediaCategory = new HashMap<>();
 
 
@@ -48,8 +52,10 @@ public class MediaCategoryParser implements JsonFileParser {
                     new TypeReference<Map<String, Object>>() {
                     });
 
+            // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
             System.out.println(map.get("entities"));
 
+            // TODO [STC]: Überlegen, ob du diesen ganzen Code-Block überhaupt noch brauchst. Ohne den letzten Teil mit Store.storeData(...) (der wegfallen sollte, siehe erstes TODO) sind das hier nur Log Ausgaben, die man evtl. weglassen könnte.
             if (map.get("entities") instanceof ArrayList) {
 
                 ArrayList arrayList = (ArrayList) map.get("entities");
@@ -66,6 +72,7 @@ public class MediaCategoryParser implements JsonFileParser {
                         String name = (String) hashMap.get("name");
                         Main.logger.info("name: " + name);
 
+                        // TODO [STC]: Diesen Code-Block entfernen (unnötig, siehe erstes TODO)
                         Store.storeData(j, id, hashMapMediaCategory);
                         j++;
                         Store.storeData(j, name, hashMapMediaCategory);
@@ -82,7 +89,7 @@ public class MediaCategoryParser implements JsonFileParser {
             e.printStackTrace();
         }
 
-        Store.storeOriginalData( fileName.getName(), hashMapMediaCategory);
+        Store.storeOriginalData(fileName.getName(), hashMapMediaCategory);
     }
 
 }

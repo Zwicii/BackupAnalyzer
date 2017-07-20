@@ -23,7 +23,11 @@ public class MediaStoreParser implements JsonFileParser {
         return instance;
     }
 
-
+    // TODO [STC]: Sprechende Variablen Namen verwenden (-> überarbeiten)
+    // Was bedeutet im nachfolgenden Code
+    //      MS ? (an mehreren Stellen)
+    //      fList ?
+    //      mfile ?
     @Override
     public void parse(String filePath) {
         int j = 0;
@@ -33,6 +37,7 @@ public class MediaStoreParser implements JsonFileParser {
 
         for (File mfile : MSfList) {
 
+            // TODO [STC]: Auskommentierten (alten) Code entfernen
 //                    System.out.println(mfile.getName());
 
 

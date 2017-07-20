@@ -8,7 +8,6 @@ import org.codehaus.jackson.type.TypeReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,6 +19,10 @@ import java.util.Map;
 public class MediaParser implements JsonFileParser {
 
     private static MediaParser instance = null;
+
+    // TODO [STC]: Diese Listen entfernen (nicht nötig)
+    // Anstattdessen in compareMedia(...) direkt die entsprechenden Sub-Listen aus Store.hashMapOriginalData verwenden;
+    // Vorschlag: zusätzliche Funktion im Store namens getMedia(...)
     private static HashMap<Integer, String> hashMapCompareData = new HashMap<>();
     private static HashMap<String, Boolean> hashMapCompareMedia = new HashMap<>();
 
@@ -48,8 +51,10 @@ public class MediaParser implements JsonFileParser {
                     new TypeReference<Map<String, Object>>() {
                     });
 
+            // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
             System.out.println(map.get("entities"));
 
+            // TODO [STC]: Überlegen, ob du diesen ganzen Code-Block überhaupt noch brauchst. Ohne den letzten Teil mit Store.storeData(...) (der wegfallen sollte, siehe erstes TODO) sind das hier nur Log Ausgaben, die man evtl. weglassen könnte.
             if (map.get("entities") instanceof ArrayList) {
 
                 ArrayList arrayList = (ArrayList) map.get("entities");
@@ -74,6 +79,7 @@ public class MediaParser implements JsonFileParser {
                         String mediaCategoryName = (String) hashMapMC.get("name");
                         Main.logger.info("mediaCategory-name: " + mediaCategoryName);
 
+                        // TODO [STC]: Diesen Code-Block entfernen (unnötig, siehe erstes TODO)
                         Store.storeData(j, id, hashMapCompareData);
                         j++;
                         Store.storeData(j, mediaCategoryid, hashMapCompareData);
