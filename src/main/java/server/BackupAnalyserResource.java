@@ -1,6 +1,7 @@
 package server;
 
 import analyser.Main;
+import analyser.Store;
 import impl.BackupFileParserImpl;
 import impl.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
@@ -8,6 +9,7 @@ import interfaces.ZipFileService;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.json.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,9 +28,9 @@ import java.util.Map;
 @Path("/test")
 public class BackupAnalyserResource {
 
-    // TODO [STC]: Versuchen, anstatt "/home/victoria" das Home-Verzeichnis des aktuellen Users dynamisch herauszubekommen
-    private String destinationPathUnzip = "/home/victoria/Temp/";
-    private final String destinationPathZip = "/home/victoria/Temp/OUT/";
+    public static String home = System.getProperty("user.home");
+    private String sourcePathUnzip = home + "/Temp/";
+    private final String sourcePathZip = home + "/Temp/OUT/";
 
     private BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
     private ZipFileService zipFileService = ZipFileServiceImpl.getInstance();
@@ -53,7 +55,23 @@ public class BackupAnalyserResource {
         return "{\"asdf\": true}";
     }
 
-    // TODO [STC]: Neue Methoden (REST Endpoints) anlegen zum Auslesen der hashMapOriginalData und hashMapCheckResults aus dem Store (im JSON Format, für Fabian später)
+    @GET
+    @Path("/OriginalData")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String OriginalData() {
+        JSONObject jsonOriginalData = new JSONObject(Store.hashMapOriginalData);
+        Main.logger.info("Original Data");
+        return jsonOriginalData.toString();
+    }
+
+    @GET
+    @Path("/CheckResults")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String CheckResults() {
+        JSONObject jsonCheckResults = new JSONObject(Store.hashMapCheckResults);
+        Main.logger.info("Check Results");
+        return jsonCheckResults.toString();
+    }
 
     @POST
     @Path("/upload")
@@ -63,8 +81,7 @@ public class BackupAnalyserResource {
         String fileNameUnzip = "";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        // TODO [STC]: Dazu kommentieren, wo der Name "datei" herkommt bzw. womit er zusammenhängt
-        List<InputPart> inputParts = uploadForm.get("datei"); //datei = name von Input von Index.html
+        List<InputPart> inputParts = uploadForm.get("datei"); //datei = name von Input (Formular) von Index.html
 
         for (InputPart inputPart : inputParts) {
 
@@ -79,26 +96,25 @@ public class BackupAnalyserResource {
                 byte[] bytes = IOUtils.toByteArray(inputStream);
 
                 //constructs upload file path
-                fileNameUnzip = destinationPathUnzip + fileNameUnzip;
-                String fileNameZip = "/home/victoria/Temp/backup/backup.zip";
+                fileNameUnzip = sourcePathUnzip + fileNameUnzip;
+                String fileNameZip = home + "/Temp/backup/backup.zip";
 
                 writeFile(bytes, fileNameUnzip);
 
-                // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
-                Main.logger.info("Unzip");
-                File newDir = new File(destinationPathUnzip + "IN"); //new directory IN
+                Main.logger.debug("Unzip");
+                File newDir = new File(sourcePathUnzip + "IN"); //new directory IN
                 newDir.mkdir();
-                destinationPathUnzip = newDir.getPath() + "/";
-                zipFileService.unzip(fileNameUnzip, destinationPathUnzip);
+                sourcePathUnzip = newDir.getPath() + "/";
+                zipFileService.unzip(fileNameUnzip, sourcePathUnzip);
 
-                // TODO [STC]: Ersetzen durch (z.B.) Main.logger.debug(...)
-                Main.logger.info("Parse");
-                backupFileParser.parseBackupFile(destinationPathUnzip);
+                Main.logger.debug("Parse");
+                backupFileParser.parseBackupFile(sourcePathUnzip);
 
-                zipFileService.zip(fileNameZip, destinationPathZip);
+                Main.logger.debug("Zip");
+                zipFileService.zip(fileNameZip, sourcePathZip);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Main.logger.error("IOException: ", e);
             }
         }
 

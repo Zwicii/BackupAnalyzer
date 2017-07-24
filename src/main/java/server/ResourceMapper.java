@@ -4,7 +4,6 @@ import javax.ws.rs.core.Application;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-
 public class ResourceMapper extends Application {
 
     public Set<Class<?>> getClasses() {

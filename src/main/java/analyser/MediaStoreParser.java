@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * parse directoy mediastore
+ * parse directory mediastore
  */
 public class MediaStoreParser implements JsonFileParser {
 
@@ -23,54 +23,56 @@ public class MediaStoreParser implements JsonFileParser {
         return instance;
     }
 
-    // TODO [STC]: Sprechende Variablen Namen verwenden (-> überarbeiten)
-    // Was bedeutet im nachfolgenden Code
-    //      MS ? (an mehreren Stellen)
-    //      fList ?
-    //      mfile ?
     @Override
     public void parse(String filePath) {
         int j = 0;
         int k = 0;
-        File directoryMS = new File(filePath);
-        File[] MSfList = directoryMS.listFiles();
+        File MediaStore = new File(filePath);
+        File[] MediaStoreFileList = MediaStore.listFiles();
 
-        for (File mfile : MSfList) {
+        if (MediaStoreFileList != null) {
+            for (File fileMediaStore : MediaStoreFileList) { //parse Mediastore
 
-            if (mfile.getName().equals("sounds")) {
+                if (fileMediaStore.getName().equals("sounds")) {
 
-                Main.logger.info("\nfound sounds");
+                    Main.logger.info("\nfound sounds");
 
-                final String soundsPath = filePath + "sounds";
-                File directoryMSsounds = new File(soundsPath);
-                File[] MSsoundsfList = directoryMSsounds.listFiles();
+                    final String soundsPath = filePath + "sounds";
+                    File Sounds = new File(soundsPath);
+                    File[] SoundsFileList = Sounds.listFiles();
 
-                for (File msfile : MSsoundsfList) {
+                    if (SoundsFileList != null) {
+                        for (File fileSounds : SoundsFileList) { //parse Sounds
 
-                    Main.logger.info(msfile.getName());
-                    Store.storeData(j, msfile.getName(), hashMapMediaStore);
-                    j++;
-                    k = j;
+                            Main.logger.info(fileSounds.getName());
+                            hashMapMediaStore.put(j, fileSounds.getName());
+                            j++;
+                            k = j;
+                        }
+                    }
+
                 }
-            }
 
-            if (mfile.getName().equals("snapshots")) {
+                if (fileMediaStore.getName().equals("snapshots")) {
 
-                Main.logger.info("\nfound snapshots");
+                    Main.logger.info("\nfound snapshots");
 
-                final String snapshotsPath = filePath + "snapshots";
-                File directoryMSsnapshots = new File(snapshotsPath);
-                File[] MSsnapshotsList = directoryMSsnapshots.listFiles();
+                    final String snapshotsPath = filePath + "snapshots";
+                    File Snapshots = new File(snapshotsPath);
+                    File[] SnapshotsFileList = Snapshots.listFiles();
 
-                for (File mshfile : MSsnapshotsList) {
+                    if (SnapshotsFileList != null) {
+                        for (File fileSnapshots : SnapshotsFileList) { //parse Snapshots
 
-                    Main.logger.info(mshfile.getName());
-                    Store.storeData(k, mshfile.getName(), hashMapMediaStore);
-                    k++;
+                            Main.logger.info(fileSnapshots.getName());
+                            hashMapMediaStore.put(k, fileSnapshots.getName());
+                            k++;
+                        }
+                    }
                 }
             }
         }
 
-        Store.storeOriginalData(directoryMS.getName(), hashMapMediaStore);
+        Store.storeOriginalData(MediaStore.getName(), hashMapMediaStore);
     }
 }
