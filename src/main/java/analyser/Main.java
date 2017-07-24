@@ -15,6 +15,8 @@ public class Main {
         //Start server
         ServerRunner serverRunner = new ServerRunner();
         serverRunner.start(8090);
+
+        //Test Push
     }
 }
 
