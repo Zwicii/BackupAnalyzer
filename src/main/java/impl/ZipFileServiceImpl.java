@@ -126,12 +126,13 @@ public class ZipFileServiceImpl implements ZipFileService {
 //            ZipUtil.pack(new File(destPath), new File("/home/victoria/Temp/backup/backup.zip")); //Zip backup.zip in backup directory
 
             //Checksum berechnen
-//            calculateChecksum();
-//
-//            String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex("/home/victoria/Temp/backupaudio.bak/backup.zip");
-//            PrintWriter out = new PrintWriter("/home/victoria/Temp/backup/md5.txt");
-//            out.write(md5);
-//            out.close();
+            calculateChecksum();
+            String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex("/home/victoria/Temp/backupaudio.bak/backup.zip");
+            PrintWriter out = new PrintWriter("/home/victoria/Temp/backup/md5.txt");
+            out.write(md5);
+            out.close();
+
+            zipFile("/home/victoria/Temp/backup.bak","/home/victoria/Temp/backup");
 
 //            ZipUtil.pack(new File("/home/victoria/Temp/backup"), new File("/home/victoria/Temp/backup.bak")); //Zip backup.zip in backup directory
 
@@ -152,40 +153,57 @@ public class ZipFileServiceImpl implements ZipFileService {
 
             Main.logger.info("Adding directory: " + destFile.getName());
 
-            for (int i = 0; i < files.length; i++) {
-                // if the file is directory, use recursion
+            for (File f : files) {
 
-                if (files[i].isDirectory()) {
-
-                    String fileZip = File + "/" + files[i].getName();
-                    String destinationPath = destPath + "/" + files[i].getName();
-                    zipFile(fileZip, destinationPath);
-                    continue;
-                }
-
-                Main.logger.info("tAdding file: " + files[i].getName());
-
-                // create byte buffer
-                byte[] buffer = new byte[1024];
-
-                FileInputStream fis = new FileInputStream(files[i]);
-                zos.putNextEntry(new ZipEntry(files[i].getName()));
-
-                int length;
-
-                while ((length = fis.read(buffer)) > 0) {
-
-                    zos.write(buffer, 0, length);
-                }
-
-                zos.closeEntry();
-
-                // close the InputStream
-                fis.close();
+                putZipEntry(zos, f, "");
             }
+
             zos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void putZipEntry(ZipOutputStream zos, File file, String path) {
+        if (file.isDirectory()) {
+            putDirectoryZipEntry(zos, file, path);
+        } else {
+            putFileZipEntry(zos, file, path);
+        }
+    }
+
+    private void putDirectoryZipEntry(ZipOutputStream zos, File file, String path) {
+        Main.logger.info("Adding directory: "+ file.getName());
+        File[] files = file.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                putZipEntry(zos, f, path + (!path.isEmpty() ? "/" : "") + file.getName()); //wenn path nicht leer ist, dann hängt / drann
+            }
+        }
+    }
+
+    private void putFileZipEntry(ZipOutputStream zos, File file, String path) {
+        try {
+            // create byte buffer
+            Main.logger.info("Adding file: " + file.getName());
+            byte[] buffer = new byte[1024];
+
+            FileInputStream fis = new FileInputStream(file);
+            zos.putNextEntry(new ZipEntry(path + (!path.isEmpty() ? "/" : "") + file.getName())); //wenn path leer ist, dann alles in backup.zip
+
+            int length;
+
+            while ((length = fis.read(buffer)) > 0) {
+
+                zos.write(buffer, 0, length);
+            }
+
+            zos.closeEntry();
+
+            // close the InputStream
+            fis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -195,7 +213,7 @@ public class ZipFileServiceImpl implements ZipFileService {
 
         try {
 
-            String yourString = "/home/victoria/Temp/IN/backup.zip";
+            String yourString = "/home/victoria/Temp/IN/backup.zip"; //2.514.487 bytes 2.514.217 bytes
             byte[] bytesOfMessage = Files.readAllBytes(Paths.get(yourString));
 
             MessageDigest md = MessageDigest.getInstance("MD5");            //2.514.217

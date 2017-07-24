@@ -1,6 +1,9 @@
 package analyser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Speichert Daten in Mashmaps
@@ -28,5 +31,56 @@ public class Store {
     public static void storeData(int key, String value, HashMap<Integer, String> hashMap) {
 
         hashMap.put(key, value);
+    }
+
+    public static String[] getMediaCategory(){
+        String [] arr = new String[1000];
+        int k =0;
+        HashMap <Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.MediaCategory.json");
+
+        if (map.get("entities") instanceof ArrayList) {
+            ArrayList arrayList = (ArrayList) map.get("entities");
+
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                if (arrayList.get(i) instanceof LinkedHashMap) {
+
+                    LinkedHashMap<Object, Object> hashMap = (LinkedHashMap<Object, Object>) arrayList.get(i);
+                    arr[k] = (String) hashMap.get("id");
+                    k++;
+                    arr[k] = (String) hashMap.get("name");
+                    k++;
+                }
+            }
+        }return arr;
+    }
+
+    public static String[] getMedia(){
+        String[] arr = new String[1000];
+        int k = 0;
+        HashMap <Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.Media.json");
+
+        if (map.get("entities") instanceof ArrayList) {
+
+            ArrayList arrayList = (ArrayList) map.get("entities");
+
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                Main.logger.info(arrayList.get(i));
+
+                if (arrayList.get(i) instanceof LinkedHashMap) {
+
+                    LinkedHashMap<Object, Object> hashMapM = (LinkedHashMap<Object, Object>) arrayList.get(i);
+
+                    arr[k] = (String) hashMapM.get("id");
+                    k++;
+                    LinkedHashMap<Object, Object> hashMapMC = (LinkedHashMap<Object, Object>) hashMapM.get("mediaCategory");
+                    arr[k] = (String) hashMapMC.get("id");
+                    k++;
+                    arr[k] = (String) hashMapMC.get("name");
+                    k++;
+                }
+            }
+        }return arr;
     }
 }

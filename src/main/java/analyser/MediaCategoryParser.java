@@ -55,30 +55,32 @@ public class MediaCategoryParser implements JsonFileParser {
             Main.logger.info(map.get("entities"));
 
             // TODO [STC]: Überlegen, ob du diesen ganzen Code-Block überhaupt noch brauchst. Ohne den letzten Teil mit Store.storeData(...) (der wegfallen sollte, siehe erstes TODO) sind das hier nur Log Ausgaben, die man evtl. weglassen könnte.
-            if (map.get("entities") instanceof ArrayList) {
+//            if (map.get("entities") instanceof ArrayList) {
+//
+//                ArrayList arrayList = (ArrayList) map.get("entities");
+//
+//                for (int i = 0; i < arrayList.size(); i++) {
+//
+//                    Main.logger.info(arrayList.get(i));
+//
+//                    if (arrayList.get(i) instanceof LinkedHashMap) {
+//
+//                        LinkedHashMap<Object, Object> hashMap = (LinkedHashMap<Object, Object>) arrayList.get(i);
+//                        String id = (String) hashMap.get("id");
+//                        Main.logger.info("id: " + id);
+//                        String name = (String) hashMap.get("name");
+//                        Main.logger.info("name: " + name);
+//
+//                        // TODO [STC]: Diesen Code-Block entfernen (unnötig, siehe erstes TODO)
+//                        Store.storeData(j, id, hashMapMediaCategory);
+//                        j++;
+//                        Store.storeData(j, name, hashMapMediaCategory);
+//                        j++;
+//                    }
+//                }
+//            }
 
-                ArrayList arrayList = (ArrayList) map.get("entities");
-
-                for (int i = 0; i < arrayList.size(); i++) {
-
-                    Main.logger.info(arrayList.get(i));
-
-                    if (arrayList.get(i) instanceof LinkedHashMap) {
-
-                        LinkedHashMap<Object, Object> hashMap = (LinkedHashMap<Object, Object>) arrayList.get(i);
-                        String id = (String) hashMap.get("id");
-                        Main.logger.info("id: " + id);
-                        String name = (String) hashMap.get("name");
-                        Main.logger.info("name: " + name);
-
-                        // TODO [STC]: Diesen Code-Block entfernen (unnötig, siehe erstes TODO)
-                        Store.storeData(j, id, hashMapMediaCategory);
-                        j++;
-                        Store.storeData(j, name, hashMapMediaCategory);
-                        j++;
-                    }
-                }
-            }
+            Store.storeOriginalData(fileName.getName(), map);
 
         } catch (JsonGenerationException e) {
             e.printStackTrace();
@@ -88,6 +90,6 @@ public class MediaCategoryParser implements JsonFileParser {
             e.printStackTrace();
         }
 
-        Store.storeOriginalData(fileName.getName(), hashMapMediaCategory);
+//        Store.storeOriginalData(fileName.getName(), hashMapMediaCategory);
     }
 }
