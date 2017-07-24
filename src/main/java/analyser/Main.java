@@ -18,13 +18,6 @@ public class Main {
         ServerRunner serverRunner = new ServerRunner();
         serverRunner.start(8090);
 
-        //Test Pull
-
+        //Test
     }
 }
-
-
-
-
-
-
