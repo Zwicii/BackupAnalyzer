@@ -13,16 +13,12 @@ import java.util.List;
 import static io.undertow.Handlers.resource;
 import static java.util.Arrays.asList;
 
-
 public class ServerRunner {
 
     private final UndertowJaxrsServer server = new UndertowJaxrsServer();
-
     /**
      * Startet Undertow server auf übergebenen Port
      */
-    // TODO [STC]: Auskommentierten (alten) Code entfernen
-//    @Override
     public void start(Integer port) {
         //IP Adresse von Rechner kann auch verwendet werden
         Undertow.Builder serverBuilder = Undertow.builder()
@@ -65,32 +61,7 @@ public class ServerRunner {
                                         .addWelcomeFiles("index.html"));
                     });
         }
-
-        // TODO [STC]: Auskommentierten (alten) Code entfernen
-//        UndertowJaxrsServer server = new UndertowJaxrsServer();
-//
-//        ResteasyDeployment deployment = new ResteasyDeployment();
-//
-//        deployment.setApplicationClass(ResourceMapper.class.getName());
-//
-//        DeploymentInfo deploymentInfo = server.undertowDeployment(deployment, "/");
-//        deploymentInfo.setDeploymentName("Test");
-//        deploymentInfo.setClassLoader(ServerRunner.class.getClassLoader());
-//
-//        deploymentInfo.setContextPath("/api");
-//
-//        server.deploy(deploymentInfo);
-//
-//        server.addResourcePrefixPath("/",
-//                resource(new PathResourceManager(Paths.get("/index.html"),100)).
-//                        addWelcomeFiles("index.html"));
-//
-//        server.start();
     }
-
-
-    // TODO [STC]: Auskommentierten (alten) Code entfernen
-    //    @Override
     public void stop() {
         server.stop();
     }
