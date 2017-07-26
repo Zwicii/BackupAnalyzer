@@ -1,8 +1,16 @@
 package analyser;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Speichert Daten in Mashmaps
@@ -24,11 +32,11 @@ public class Store {
         Main.logger.info("Key: " + key + " " + "Value: " + value);
     }
 
-    public static String[] getMediaCategory(){
-        String [] arr = new String[1000];
-        int k =0;
+    public static String[] getMediaCategory() {
+        String[] arr = new String[1000];
+        int k = 0;
         //get all Data from MediaCategory
-        HashMap <Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.MediaCategory.json");
+        HashMap<Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.MediaCategory.json");
 
         if (map.get("entities") instanceof ArrayList) {
             ArrayList arrayList = (ArrayList) map.get("entities"); // entities value: 3 LinkedHashMaps
@@ -44,14 +52,15 @@ public class Store {
                     k++;
                 }
             }
-        }return arr;
+        }
+        return arr;
     }
 
-    public static String[] getMedia(){
+    public static String[] getMedia() {
         String[] arr = new String[1000];
         int k = 0;
         // get all Data from Media
-        HashMap <Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.Media.json");
+        HashMap<Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.Media.json");
 
         if (map.get("entities") instanceof ArrayList) {
 
@@ -74,6 +83,7 @@ public class Store {
                     k++;
                 }
             }
-        }return arr;
+        }
+        return arr;
     }
 }

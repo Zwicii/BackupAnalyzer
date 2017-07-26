@@ -6,8 +6,6 @@ import server.ServerRunner;
 
 import java.io.IOException;
 
-
-
 public class Main {
 
     public static final Logger logger = LogManager.getLogger(Main.class);

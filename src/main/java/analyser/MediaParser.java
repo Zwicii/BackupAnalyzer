@@ -8,9 +8,7 @@ import org.codehaus.jackson.type.TypeReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -18,14 +16,12 @@ import java.util.Map;
  */
 public class MediaParser implements JsonFileParser {
 
-    private static MediaParser instance = null;
-
     // TODO [STC]: Diese Listen entfernen (nicht nötig)
     // Anstattdessen in compareMedia(...) direkt die entsprechenden Sub-Listen aus Store.hashMapOriginalData verwenden;
-
-    //Singleton Pattern
     private static HashMap<String, Boolean> hashMapCompareMedia = new HashMap<>();
 
+    //Singleton Pattern
+    private static MediaParser instance = null;
     private MediaParser() {
     }
 
@@ -70,11 +66,11 @@ public class MediaParser implements JsonFileParser {
         String[] arrMedia = Store.getMedia(); //Data which will be compared from Media
         String[] arrMediaCategory = Store.getMediaCategory(); //Data which will be compared from MediaCategory
 
-        for(int i = 0; arrMedia[i] != null; i++){
+        for (int i = 0; arrMedia[i] != null; i++) {
 
             boolean found = false;
 
-            for(int j=0; arrMediaCategory[j] != null; j++){
+            for (int j = 0; arrMediaCategory[j] != null; j++) {
 
                 if (arrMedia[i].equals(arrMediaCategory[j])) {//look if arrMediaCategory[] contains arrMedia[i]
                     Main.logger.info(arrMedia[i] + ": OK - found in Media Category");
@@ -86,7 +82,7 @@ public class MediaParser implements JsonFileParser {
             }
 
             for (int l = 0; l < MediaStoreParser.hashMapMediaStore.size(); l++) {//look if hashMapMediaStore contains arrMedia[i]
-                if (arrMedia[i].equals( MediaStoreParser.hashMapMediaStore.get(l))) {
+                if (arrMedia[i].equals(MediaStoreParser.hashMapMediaStore.get(l))) {
                     Main.logger.info(arrMedia[i] + ": OK - found in Media Store");
                     found = true;
                     hashMapCompareMedia.put(arrMedia[i], found);

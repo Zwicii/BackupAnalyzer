@@ -28,7 +28,7 @@ import java.util.Map;
 @Path("/test")
 public class BackupAnalyserResource {
 
-    public static String home = System.getProperty("user.home");
+    public static String home = System.getProperty("user.home"); //home Verzeichnis
     private String sourcePathUnzip = home + "/Temp/";
     private final String sourcePathZip = home + "/Temp/OUT/";
 
@@ -37,6 +37,7 @@ public class BackupAnalyserResource {
 
     public BackupAnalyserResource() throws IOException {
     }
+
     /**
      * Test-Methode um funktionierende Kommunikation aufbauen zu können
      */
@@ -55,9 +56,9 @@ public class BackupAnalyserResource {
         return "{\"asdf\": true}";
     }
 
-    @GET
-    @Path("/OriginalData")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET //GET-Request: Daten im Header gesendet
+    @Path("/OriginalData") //Pfad : localhost:Port/api/test/OriginalData
+    @Produces(MediaType.APPLICATION_JSON) //Gibt an was returned werden soll
     public String OriginalData() {
         JSONObject jsonOriginalData = new JSONObject(Store.hashMapOriginalData);
         Main.logger.info("Original Data");
@@ -73,25 +74,25 @@ public class BackupAnalyserResource {
         return jsonCheckResults.toString();
     }
 
-    @POST
+    @POST //POST-Request: Daten im BODY nach dem Header gesendet
     @Path("/upload")
-    @Consumes("multipart/form-data")
+    @Consumes("multipart/form-data") //MIME-Type: html-enctype: allows entire files to be included in the data
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(MultipartFormDataInput input) {
-        String fileNameUnzip = "";
 
+        String fileNameUnzip;
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        List<InputPart> inputParts = uploadForm.get("datei"); //datei = name von Input (Formular) von Index.html
+        List<InputPart> inputParts = uploadForm.get("datei"); //Get inputParts from name (datei = name von Input (Formular) von Index.html)
 
         for (InputPart inputPart : inputParts) {
 
             try {
 
-                MultivaluedMap<String, String> header = inputPart.getHeaders();
+                MultivaluedMap<String, String> header = inputPart.getHeaders(); //header Daten
                 fileNameUnzip = getFileName(header);
 
                 //convert the uploaded file to inputstream
-                InputStream inputStream = inputPart.getBody(InputStream.class, null);
+                InputStream inputStream = inputPart.getBody(InputStream.class, null);//body Daten ?
 
                 byte[] bytes = IOUtils.toByteArray(inputStream);
 
@@ -99,10 +100,11 @@ public class BackupAnalyserResource {
                 fileNameUnzip = sourcePathUnzip + fileNameUnzip;
                 String fileNameZip = home + "/Temp/backup/backup.zip";
 
-                writeFile(bytes, fileNameUnzip);
+                writeFile(bytes, fileNameUnzip);//creates backupaudio.bak file to unzip it later
 
                 Main.logger.debug("Unzip");
-                File newDir = new File(sourcePathUnzip + "IN"); //new directory IN
+                //new directory IN
+                File newDir = new File(sourcePathUnzip + "IN");
                 newDir.mkdir();
                 sourcePathUnzip = newDir.getPath() + "/";
                 zipFileService.unzip(fileNameUnzip, sourcePathUnzip);
@@ -119,9 +121,10 @@ public class BackupAnalyserResource {
         }
 
         return Response.status(200)
-                .entity("{}").build();
+                .entity("{}").build(); //?
     }
 
+    //Holt Filename aus Map mit allen headers
     private String getFileName(MultivaluedMap<String, String> header) {
 
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
@@ -148,7 +151,7 @@ public class BackupAnalyserResource {
 
         FileOutputStream fop = new FileOutputStream(file);
 
-        fop.write(content);
+        fop.write(content); //content of backupaudio.bak
         fop.flush();
         fop.close();
     }
