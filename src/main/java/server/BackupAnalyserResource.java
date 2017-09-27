@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * REST Interface für Nutzer um über HTTP auf Daten zugreifen zu können
  */
-@Path("/test")
+@Path("/BackupAnalyser")
 public class BackupAnalyserResource {
 
     public static String home = System.getProperty("user.home"); //home Verzeichnis
@@ -49,11 +49,13 @@ public class BackupAnalyserResource {
     }
 
     @GET
-    @Path("/asdf")
+    @Path("/getTestInfo")
     @Produces(MediaType.APPLICATION_JSON)
-    public String asdf() {
-        System.out.println("asdf");
-        return "{\"asdf\": true}";
+    public String getTestInfo() {
+        JSONObject jsonCheckResults = new JSONObject(Store.hashMapCheckResults);
+        Main.logger.info("getTestInfo");
+        return jsonCheckResults.toString();
+        //return "{\"asdf\": true}";
     }
 
     @GET //GET-Request: Daten im Header gesendet
@@ -121,7 +123,7 @@ public class BackupAnalyserResource {
         }
 
         return Response.status(200)
-                .entity("{}").build(); //?
+                .entity("{upload successful}").build(); //?
     }
 
     //Holt Filename aus Map mit allen headers

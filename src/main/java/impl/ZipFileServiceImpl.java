@@ -147,7 +147,7 @@ public class ZipFileServiceImpl implements ZipFileService {
             out.close();
 
             //zip files from backup into new file backup.bak
-            zipFile(BackupAnalyserResource.home + "/Temp/backup.bak", BackupAnalyserResource.home + "/Temp/backup");
+            zipFile(BackupAnalyserResource.home + "/Temp/backup.zip", BackupAnalyserResource.home + "/Temp/backup");
 //            ZipUtil.pack(new File(BackupAnalyserResource.home + "/Temp/backup"), new File(BackupAnalyserResource.home + "/Temp/backup.bak")); //Zip backup.zip in backup directory
 
         } catch (FileNotFoundException e) {

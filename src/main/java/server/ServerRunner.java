@@ -13,6 +13,7 @@ import java.util.List;
 import static io.undertow.Handlers.resource;
 import static java.util.Arrays.asList;
 
+
 public class ServerRunner {
 
     private final UndertowJaxrsServer server = new UndertowJaxrsServer();
@@ -65,6 +66,7 @@ public class ServerRunner {
                     });
         }
     }
+
 
     public void stop() {
         server.stop();

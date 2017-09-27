@@ -22,6 +22,7 @@ public class MediaParser implements JsonFileParser {
 
     //Singleton Pattern
     private static MediaParser instance = null;
+
     private MediaParser() {
     }
 

@@ -37,6 +37,7 @@ public class BackupFileParserImpl implements BackupFileParser {
 
         //Eventuell FilePath gleich bei den Parsern angeben
         String filePathMediaStore = BackupAnalyserResource.home + "/Temp/IN/mediastore/";
+
         String filePathMediaCategory = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.mediastore.MediaCategory.json/";
         String filePathMedia = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.mediastore.Media.json/";
         String filePathSecurityPermission = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.security.Permission.json/";
@@ -57,12 +58,12 @@ public class BackupFileParserImpl implements BackupFileParser {
                 jsonFileParserMediaStore.parse(filePathMediaStore);
             }
 
-            if(file.getName().endsWith("Permission.json")){
+            if (file.getName().endsWith("Permission.json")) {
                 Main.logger.info("\nfound Permission");
                 jsonFileParserSecurityPermission.parse(filePathSecurityPermission);
             }
 
-            if(file.getName().endsWith("User.json")){
+            if (file.getName().endsWith("User.json")) {
                 Main.logger.info("\nfound User");
                 jsonFileParserUser.parse(filePathSecurityPermission);
             }
