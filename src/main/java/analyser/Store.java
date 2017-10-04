@@ -1,16 +1,8 @@
 package analyser;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Speichert Daten in Mashmaps
@@ -19,6 +11,13 @@ public class Store {
 
     public static HashMap<String, Object> hashMapOriginalData = new HashMap<>();
     public static HashMap<String, Object> hashMapCheckResults = new HashMap<>();
+    public static HashMap<Object, Object> hashMapAllEntities = new HashMap<>();
+
+    public static void storeAllEntities(Integer key, Object value) {
+
+        hashMapAllEntities.put(key, value);
+        Main.logger.info("Key: " + key + " " + "Value: " + value);
+    }
 
     public static void storeOriginalData(String key, Object value) {
 

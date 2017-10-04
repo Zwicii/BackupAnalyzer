@@ -49,12 +49,12 @@ public class BackupAnalyserResource {
     }
 
     @GET
-    @Path("/getTestInfo")
+    @Path("/AllEntities")
     @Produces(MediaType.APPLICATION_JSON)
     public String getTestInfo() {
-        JSONObject jsonCheckResults = new JSONObject(Store.hashMapCheckResults);
-        Main.logger.info("getTestInfo");
-        return jsonCheckResults.toString();
+        JSONObject jsonAllEntities = new JSONObject(Store.hashMapAllEntities);
+        Main.logger.info("AllEntities");
+        return jsonAllEntities.toString();
         //return "{\"asdf\": true}";
     }
 
@@ -92,6 +92,7 @@ public class BackupAnalyserResource {
 
                 MultivaluedMap<String, String> header = inputPart.getHeaders(); //header Daten
                 fileNameUnzip = getFileName(header);
+
 
                 //convert the uploaded file to inputstream
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);//body Daten ?
@@ -157,4 +158,5 @@ public class BackupAnalyserResource {
         fop.flush();
         fop.close();
     }
+
 }
