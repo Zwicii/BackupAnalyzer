@@ -51,7 +51,7 @@ public class BackupFileParserImpl implements BackupFileParser {
         for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
             //Zuerst Daten aus MediaCategory und mediastore holen, sonst NullPointerException weil MediaParser sonst Daten zum vergleichen fehlen
 
-            Store.storeAllEntities( i , file.getName());
+            Store.storeAllEntities(i, file.getName());
             i++;
 
             if (file.getName().endsWith(".MediaCategory.json")) {

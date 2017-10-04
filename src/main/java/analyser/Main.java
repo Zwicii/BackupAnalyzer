@@ -27,8 +27,6 @@ public class Main {
         ServerRunner serverRunner = new ServerRunner();
         serverRunner.start(8090);
 
-
-
     }
 
     private static void staticalAnalyser() {
@@ -36,7 +34,7 @@ public class Main {
         String fileNameUnzip = "backupmedia.zip";
 
         String sourcePathUnzip = BackupAnalyserResource.home + "/Temp/";
-        String sourcePathZip =BackupAnalyserResource.home + "/Temp/OUT/";
+        String sourcePathZip = BackupAnalyserResource.home + "/Temp/OUT/";
         ZipFileService zipFileService = ZipFileServiceImpl.getInstance();
         BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
 

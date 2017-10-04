@@ -65,7 +65,7 @@ public class MediaParser implements JsonFileParser {
     public static void compareMedia() {
 
         String[] arrMedia = Store.getMedia(); //Data which will be compared from Media
-        String[] arrMediaCategory = Store.getMediaCategory(); //Data which will be compared from MediaCategory
+        Object[] arrMediaCategory = Store.getMediaCategory(); //Data which will be compared from MediaCategory
 
         for (int i = 0; arrMedia[i] != null; i++) {
 

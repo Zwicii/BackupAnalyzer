@@ -31,8 +31,8 @@ public class Store {
         Main.logger.info("Key: " + key + " " + "Value: " + value);
     }
 
-    public static String[] getMediaCategory() {
-        String[] arr = new String[1000];
+    public static Object[] getMediaCategory() {
+        Object[] arr = new Object[1000];
         int k = 0;
         //get all Data from MediaCategory
         HashMap<Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.MediaCategory.json");
@@ -45,9 +45,13 @@ public class Store {
                 if (arrayList.get(i) instanceof LinkedHashMap) {
 
                     LinkedHashMap<Object, Object> hashMap = (LinkedHashMap<Object, Object>) arrayList.get(i); //Hashmap for every entry (sound/snapshots)
-                    arr[k] = (String) hashMap.get("id");
+                    arr[k] = hashMap.get("id");
                     k++;
-                    arr[k] = (String) hashMap.get("name");
+                    arr[k] = hashMap.get("name");
+                    k++;
+                    arr[k] = hashMap.get("maxSpace");
+                    k++;
+                    arr[k] = hashMap.get("usedSpace");
                     k++;
                 }
             }
