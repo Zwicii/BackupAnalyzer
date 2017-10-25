@@ -37,15 +37,15 @@ public class MediaCategoryParser implements JsonFileParser {
 
             ObjectMapper mapper = new ObjectMapper(); //converting between Java objects and matching JSON constructs.
 
-            // read JSON from a file and put it into mapMediaCategory
-            Map<String, Object> mapMediaCategory = mapper.readValue(
+            // read JSON from a file and put it into map
+            Map<String, Object> map = mapper.readValue(
                     new File(filePath),
                     new TypeReference<Map<String, Object>>() {
                     });
 
-            Main.logger.info(mapMediaCategory.get("entities"));
+            Main.logger.info(map.get("entities"));
 
-            Store.storeOriginalData(fileName.getName(), mapMediaCategory);
+            Store.storeOriginalData(fileName.getName(), map);
 
         } catch (JsonGenerationException e) {
             Main.logger.error("JsonGenerationException: ", e);

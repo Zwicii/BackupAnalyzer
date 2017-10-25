@@ -11,13 +11,6 @@ public class Store {
 
     public static HashMap<String, Object> hashMapOriginalData = new HashMap<>();
     public static HashMap<String, Object> hashMapCheckResults = new HashMap<>();
-    public static HashMap<Object, Object> hashMapAllEntities = new HashMap<>();
-
-    public static void storeAllEntities(Integer key, Object value) {
-
-        hashMapAllEntities.put(key, value);
-        Main.logger.info("Key: " + key + " " + "Value: " + value);
-    }
 
     public static void storeOriginalData(String key, Object value) {
 

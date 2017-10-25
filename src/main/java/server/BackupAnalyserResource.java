@@ -52,7 +52,7 @@ public class BackupAnalyserResource {
     @Path("/AllEntities")
     @Produces(MediaType.APPLICATION_JSON)
     public String getTestInfo() {
-        JSONObject jsonAllEntities = new JSONObject(Store.hashMapAllEntities);
+        JSONObject jsonAllEntities = new JSONObject(Store.hashMapOriginalData.get("backupaudio.zip"));
         Main.logger.info("AllEntities");
         return jsonAllEntities.toString();
         //return "{\"asdf\": true}";
@@ -124,7 +124,11 @@ public class BackupAnalyserResource {
         }
 
         return Response.status(200)
-                .entity("{upload successful}").build(); //?
+                .entity(new JSONObject(Store.hashMapOriginalData.get("backupaudio.zip")).toString())
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "*")
+                .header("Access-Control-Allow-Headers", "*")
+                .allow("OPTIONS").build();
     }
 
     //Holt Filename aus Map mit allen headers

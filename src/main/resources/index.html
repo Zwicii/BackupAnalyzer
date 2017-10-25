@@ -7,8 +7,14 @@
 <body>
 Dies ist eine Testseite.
 
-<form method="post" enctype="multipart/form-data" action="http://localhost:8090/api/BackupAnalyser/upload">
+<script type="text/javascript">
+    var ip = "<?php echo $_SERVER['REMOTE_ADDR']; ?>";
+    var url = "http://" + ip + ":8090/api/BackupAnalyser/upload";
+</script>
+
+<form method="post" enctype="multipart/form-data" action= "http://localhost:8090/api/BackupAnalyser/upload">
     <label>Wählen Sie eine Textdatei (*.txt, *.html usw.) von Ihrem Rechner aus.
+        <script type="text/javascript">document.write(url)</script>
         <input name="datei" type="file" size="50" accept="text/*">
     </label>
     <button>upload</button>

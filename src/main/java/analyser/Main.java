@@ -21,11 +21,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        staticalAnalyser();
+        //staticalAnalyser();
 
         //Start server
         ServerRunner serverRunner = new ServerRunner();
         serverRunner.start(8090);
+
+
 
     }
 

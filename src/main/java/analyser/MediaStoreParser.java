@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class MediaStoreParser implements JsonFileParser {
 
     private static MediaStoreParser instance = null;
-    public static HashMap<Integer, String> hashMapMediaStore = new HashMap<>();
+    public static HashMap<Integer, String> hashMapMediaStore = new HashMap<>(); //Beinhaltet alle Daten im Mediastore, wei map von den json Files
 
     private MediaStoreParser() {
     }
