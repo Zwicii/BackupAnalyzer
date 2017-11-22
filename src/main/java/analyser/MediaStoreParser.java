@@ -26,7 +26,6 @@ public class MediaStoreParser implements JsonFileParser {
     @Override
     public void parse(String filePath) {
         int j = 0;
-        int k = 0;
         File MediaStore = new File(filePath);
         File[] MediaStoreFileList = MediaStore.listFiles();
 
@@ -47,10 +46,8 @@ public class MediaStoreParser implements JsonFileParser {
                             Main.logger.info(fileSounds.getName());
                             hashMapMediaStore.put(j, fileSounds.getName());
                             j++;
-                            k = j;
                         }
                     }
-
                 }
 
                 if (fileMediaStore.getName().equals("snapshots")) {
@@ -65,8 +62,8 @@ public class MediaStoreParser implements JsonFileParser {
                         for (File fileSnapshots : SnapshotsFileList) { //parse Snapshots
 
                             Main.logger.info(fileSnapshots.getName());
-                            hashMapMediaStore.put(k, fileSnapshots.getName());
-                            k++;
+                            hashMapMediaStore.put(j, fileSnapshots.getName());
+                            j++;
                         }
                     }
                 }

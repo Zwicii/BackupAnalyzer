@@ -59,14 +59,13 @@ public class ServerRunner {
                     })
                     .findFirst()
                     .ifPresent(path -> {
-
                         server.addResourcePrefixPath("/",
                                 resource(new PathResourceManager(Paths.get(path.toString()), 100))
                                         .addWelcomeFiles("index.html"));
                     });
         }
     }
-    
+
     public void stop() {
         server.stop();
     }

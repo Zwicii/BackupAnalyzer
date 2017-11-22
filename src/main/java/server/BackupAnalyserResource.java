@@ -6,6 +6,7 @@ import impl.BackupFileParserImpl;
 import impl.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
 import interfaces.ZipFileService;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -30,7 +31,7 @@ public class BackupAnalyserResource {
 
     public static String home = System.getProperty("user.home"); //home Verzeichnis
     private String sourcePathUnzip = home + "/Temp/";
-    private final String sourcePathZip = home + "/Temp/OUT/";
+    private String sourcePathZip = home + "/Temp/";
 
     private BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
     private ZipFileService zipFileService = ZipFileServiceImpl.getInstance();
@@ -52,7 +53,7 @@ public class BackupAnalyserResource {
     @Path("/AllEntities")
     @Produces(MediaType.APPLICATION_JSON)
     public String getTestInfo() {
-        JSONObject jsonAllEntities = new JSONObject(Store.hashMapOriginalData.get("backupaudio.zip"));
+        JSONObject jsonAllEntities = new JSONObject(BackupFileParserImpl.hashMapAllEntities);
         Main.logger.info("AllEntities");
         return jsonAllEntities.toString();
         //return "{\"asdf\": true}";
@@ -76,6 +77,15 @@ public class BackupAnalyserResource {
         return jsonCheckResults.toString();
     }
 
+    @GET
+    @Path("/Errors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Errors() {
+        JSONObject jsonErrors = new JSONObject(BackupFileParserImpl.hashMapErrors);
+        Main.logger.info("Errors");
+        return jsonErrors.toString();
+    }
+
     @POST //POST-Request: Daten im BODY nach dem Header gesendet
     @Path("/upload")
     @Consumes("multipart/form-data") //MIME-Type: html-enctype: allows entire files to be included in the data
@@ -85,6 +95,9 @@ public class BackupAnalyserResource {
         String fileNameUnzip;
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<InputPart> inputParts = uploadForm.get("datei"); //Get inputParts from name (datei = name von Input (Formular) von Index.html)
+
+        JSONObject ok = new JSONObject();
+        ok.put("Status", "upload successful");
 
         for (InputPart inputPart : inputParts) {
 
@@ -107,16 +120,23 @@ public class BackupAnalyserResource {
 
                 Main.logger.debug("Unzip");
                 //new directory IN
-                File newDir = new File(sourcePathUnzip + "IN");
-                newDir.mkdir();
-                sourcePathUnzip = newDir.getPath() + "/";
+                File dirIN = new File(sourcePathUnzip + "IN");
+                dirIN.mkdir();
+                sourcePathUnzip = dirIN.getPath() + "/";
                 zipFileService.unzip(fileNameUnzip, sourcePathUnzip);
 
                 Main.logger.debug("Parse");
                 backupFileParser.parseBackupFile(sourcePathUnzip);
 
                 Main.logger.debug("Zip");
+                File dirOUT = new File(sourcePathZip + "OUT");
+                dirOUT.mkdir();
+                sourcePathZip = dirOUT.getPath() + "/";
                 zipFileService.zip(fileNameZip, sourcePathZip);
+
+                //directories IN and OUT löschen
+                FileUtils.deleteDirectory(dirIN);
+                FileUtils.deleteDirectory(dirOUT);
 
             } catch (IOException e) {
                 Main.logger.error("IOException: ", e);
@@ -124,7 +144,7 @@ public class BackupAnalyserResource {
         }
 
         return Response.status(200)
-                .entity(new JSONObject(Store.hashMapOriginalData.get("backupaudio.zip")).toString())
+                .entity(ok.toString()) //new JSONObject(BackupFileParserImpl.hashMapAllEntities).toString()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "*")
                 .header("Access-Control-Allow-Headers", "*")

@@ -10,6 +10,7 @@ import server.BackupAnalyserResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -22,9 +23,12 @@ public class BackupFileParserImpl implements BackupFileParser {
     private JsonFileParser jsonFileParserMediaStore = MediaStoreParser.getInstance();
     private JsonFileParser jsonFileParserSecurityPermission = PermissionParser.getInstance();
     private JsonFileParser jsonFileParserUser = UserParser.getInstance();
+    private JsonFileParser jsonFileParserSanity = JsonFileSanityCheckParser.getInstance();
 
     public HashMap<String, Boolean> hashMapBackupFileContents = new HashMap<>();
-    public HashMap<Integer, String> hashMapAllEntities = new HashMap<>();
+    public static HashMap<Integer, String> hashMapAllEntities = new HashMap<>();
+    public static HashMap<String,String> hashMapErrors = new HashMap<>();
+
 
     //Singleton Pattern
     private static BackupFileParserImpl instance = null;
@@ -41,79 +45,103 @@ public class BackupFileParserImpl implements BackupFileParser {
 
     public void parseBackupFile(String filePath) {
 
-        //Eventuell FilePath gleich bei den Parsern angeben
-        String filePathMediaStore = BackupAnalyserResource.home + "/Temp/IN/mediastore/";
-
-        String filePathMediaCategory = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.mediastore.MediaCategory.json";
-        String filePathMedia = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.mediastore.Media.json";
-        String filePathSecurityPermission = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.security.Permission.json";
-        String filePathUser = BackupAnalyserResource.home + "/Temp/IN/com.commend.platform.security.User.json";
-
         //Variables
         boolean found;
         int i = 0;
         File directory = new File(filePath);
         File[] fList = directory.listFiles(); //get all the files from a directory
 
-        for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
-            //Zuerst Daten aus MediaCategory und mediastore holen, sonst NullPointerException weil MediaParser sonst Daten zum vergleichen fehlen
 
+        for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
+
+            //Zuerst Daten aus MediaCategory und mediastore holen, sonst NullPointerException weil MediaParser sonst Daten zum vergleichen fehlen
             hashMapAllEntities.put(i, file.getName());
             i++;
 
+            //JSONFileSanityParser
+            if(file.getName().endsWith(".json")){
+                jsonFileParserSanity.parse(getJSONFilePath(file));
+            }
+
             if (file.getName().endsWith(".MediaCategory.json")) {
                 Main.logger.info("\nfound MediaCategory");
-                jsonFileParserMediaCategory.parse(filePathMediaCategory);
+                jsonFileParserMediaCategory.parse(getJSONFilePath(file));
             }
 
             if (file.getName().equals("mediastore")) {
                 Main.logger.info("\nfound mediastore");
-                jsonFileParserMediaStore.parse(filePathMediaStore);
+                jsonFileParserMediaStore.parse(getJSONFilePath(file));
             }
 
             if (file.getName().endsWith("Permission.json")) {
                 Main.logger.info("\nfound Permission");
-                jsonFileParserSecurityPermission.parse(filePathSecurityPermission);
+                jsonFileParserSecurityPermission.parse(getJSONFilePath(file));
             }
 
             if (file.getName().endsWith("User.json")) {
                 Main.logger.info("\nfound User");
-                jsonFileParserUser.parse(filePathUser);
+                jsonFileParserUser.parse(getJSONFilePath(file));
             }
+
         }
 
+
+
         //Schaut ob Alle Json-Files, md5.txt und backup.zip in backupfile enthalten sind
-        for(String name : getFile("BackupFileContents")){
-            found = false;
+        {
+            for (String name : getFile("BackupFileContents")) {
+                found = false;
 
-            for (File file : fList) {
+                for (File file : fList) {
 
-                if(name != null){ //Weil sonst NPE und file.getName = null in Checkresult hashmap
-                    if(name.equals(file.getName())){
-                        found = true;
-                        hashMapBackupFileContents.put(file.getName(), found);
-                        break;
+                    if (name != null) { //Weil sonst NPE und file.getName = null in Checkresult hashmap
+                        if (name.equals(file.getName())) {
+                            found = true;
+                            hashMapBackupFileContents.put(file.getName(), found);
+                            break;
+                        }
+                    }
+                }
+
+                if (name != null) {
+                    if (!found) {
+                        hashMapBackupFileContents.put(name, found);
+                        hashMapErrors.put(name, "File does not exists");
                     }
                 }
             }
-
-            if(name != null){
-                if (!found){
-                    hashMapBackupFileContents.put(name, found);
-                }
-            }
         }
-
-        Store.storeCheckResults(directory.getName(), hashMapBackupFileContents); //directory.getName() = backupaudio.zip
 
         for (File file : fList) {
             if (file.getName().endsWith(".Media.json")) {
                 Main.logger.info("\nfound Media");
-                jsonFileParserMedia.parse(filePathMedia);
+                jsonFileParserMedia.parse(getJSONFilePath(file));
             }
         }
 
+        Store.storeCheckResults("JsonFileSanityCheck", JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck);
+        Store.storeCheckResults("BackupFileContents", hashMapBackupFileContents); //directory.getName() = backupaudio.zip
+        Store.storeCheckResults("DeviceDescription", checkDeviceDescription());
+
     }
+
+    //Schaut ob alle Sub-Properties von deviceDescription gleich sind
+    public Boolean checkDeviceDescription(){
+
+        HashMap<Object, Object> value = null;
+
+        for (Map.Entry e : JsonFileSanityCheckParser.hashMapCompareDeviceDescription.entrySet()) {
+            if (value == null) {
+                value = (HashMap<Object, Object>) e.getValue();
+            } else if (!value.equals(e)) {
+                hashMapErrors.put(e.getKey().toString(), "Wrong deviceDescription");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     public String[] getFile(String fileName) {
 
@@ -135,5 +163,10 @@ public class BackupFileParserImpl implements BackupFileParser {
         }
 
         return names;
+    }
+
+    public String getJSONFilePath(File file){
+
+        return BackupAnalyserResource.home + "/Temp/IN/" + file.getName() + "/";
     }
 }

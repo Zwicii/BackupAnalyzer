@@ -36,7 +36,8 @@ public class MediaCategoryParser implements JsonFileParser {
         try {
 
             ObjectMapper mapper = new ObjectMapper(); //converting between Java objects and matching JSON constructs.
-
+            //TODO[OBV]: Daten für map aus hashmapOriginal Data holen, da hier alle Maps gespeichert wurden
+            //TODO[OBV]: Klasse zurzeit eigentlich unnötig
             // read JSON from a file and put it into map
             Map<String, Object> map = mapper.readValue(
                     new File(filePath),
@@ -45,7 +46,7 @@ public class MediaCategoryParser implements JsonFileParser {
 
             Main.logger.info(map.get("entities"));
 
-            Store.storeOriginalData(fileName.getName(), map);
+            //Store.storeOriginalData(fileName.getName(), map); im JsonFileSanityCheckParser machen
 
         } catch (JsonGenerationException e) {
             Main.logger.error("JsonGenerationException: ", e);

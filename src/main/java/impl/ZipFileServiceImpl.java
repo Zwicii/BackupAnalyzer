@@ -106,7 +106,7 @@ public class ZipFileServiceImpl implements ZipFileService {
             }
 
             File IN = new File(srcPathCopy);
-            File[] filesIN = IN.listFiles();
+            File[] filesIN = IN.listFiles(); // in filesIN sind nun alle Files von der directory IN
 
             if (filesIN != null) {
                 for (File file : filesIN) { //int i = 0; i < filesIN.length; i++
@@ -227,7 +227,7 @@ public class ZipFileServiceImpl implements ZipFileService {
             String zipFilePath = BackupAnalyserResource.home + "/Temp/backup/backup.zip"; //gezipt: 2.514.487 bytes original: 2.514.217 bytes
             byte[] bytesOfMessage = Files.readAllBytes(Paths.get(zipFilePath));
 
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("MD5"); //Liefert Algorithmus, der eine bestimmte Berechnungsfunktion implementiert
             byte[] mdbytes = md.digest(bytesOfMessage);
 
             //convert the byte to hex format
@@ -236,6 +236,10 @@ public class ZipFileServiceImpl implements ZipFileService {
                 //sb.append(String.format("%02x", mdbytes[i]));
                 sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
                 //https://stackoverflow.com/questions/25838473/what-does-0xff-do-and-md5-structure?lq=1
+                //& 0xFF performs a binary AND, causing the returning value to be between 0 and 255 (which a byte always is anyway)
+                //+ 0x100 adds 256 to the result to ensure the result is always 3 digits
+                //Integer.toString(src, 16) converts the integer to a string with helix 16 (hexadecimal)
+                //Finally .substring(1) strips the first character (the 1 from step 2)
             }
 
             Main.logger.info("Digest(in hex format) md5: " + sb.toString());

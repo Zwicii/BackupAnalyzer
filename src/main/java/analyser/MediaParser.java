@@ -1,5 +1,6 @@
 package analyser;
 
+import impl.BackupFileParserImpl;
 import interfaces.JsonFileParser;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -92,8 +93,9 @@ public class MediaParser implements JsonFileParser {
             }
 
             if (!found) {
-                Main.logger.error(arrMedia[i] + ": MediaCategory or Data in MediaStore don't exist");
+                Main.logger.error(arrMedia[i] + ": MediaCategory or Data in MediaStore doesn't exist");
                 hashMapCompareMedia.put(arrMedia[i], found);
+                BackupFileParserImpl.hashMapErrors.put(arrMedia[i], "MediaCategory or Data in MediaStore does not exist");
             }
         }
     }
