@@ -6,12 +6,15 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JsonFileSanityCheckParser implements JsonFileParser {
 
@@ -30,7 +33,6 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
         }
         return instance;
     }
-
     @Override
     public void parse(String filePath) {
 
@@ -42,7 +44,7 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
             ObjectMapper mapper = new ObjectMapper(); //converting between Java objects and matching JSON constructs.
 
             // read JSON from a file and put it into map
-             Map<String, Object> map = mapper.readValue(
+            Map<String, Object> map = mapper.readValue(
                     new File(filePath),
                     new TypeReference<Map<String, Object>>() {
                     });
@@ -51,151 +53,158 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
             Store.storeOriginalData(fileName.getName(), map);
 
             //Kontrolliert ob bei _type alles passt
-            if(map.containsValue("_type")){
-                if(! map.get("_type").equals("com.commend.iss.DataContainer")){
+            if (map.containsKey("_type")) {
+
+                String type = (String) map.get("_type");
+                if (! type.equals("com.commend.iss.backup.DataContainer")) {
                     BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "_type does not exist");
                     check = false;
                 }
             }
 
             //Kontrolliert ob bei deviceDescription alles passt
-            if(map.containsValue("deviceDescription")){
+            if (map.containsKey("deviceDescription")) {
 
-                if(map.get("deviceDescription") instanceof LinkedHashMap){
+                if (map.get("deviceDescription") instanceof LinkedHashMap) {
 
                     //Alle Hasmaps von deviceDescription
-                    LinkedHashMap<Object, Object> linkedHashMapDeviceDescription= (LinkedHashMap<Object, Object>) ((LinkedHashMap) map.get("deviceDescription")).values();
+                    LinkedHashMap<Object, Object> linkedHashMapDeviceDescription = (LinkedHashMap<Object, Object>) ((LinkedHashMap) map.get("deviceDescription"));
                     hashMapCompareDeviceDescription.put(fileName.getName(), linkedHashMapDeviceDescription);
 
                     //applicationName
-                    if((linkedHashMapDeviceDescription.containsValue("applicationName"))){
+                    if ((linkedHashMapDeviceDescription.containsKey("applicationName"))) {
 
-                        if(linkedHashMapDeviceDescription.get("applicationName") == null || linkedHashMapDeviceDescription.get("applicationName") instanceof String == false){
+                        if (linkedHashMapDeviceDescription.get("applicationName") == null || linkedHashMapDeviceDescription.get("applicationName") instanceof String == false) {
                             check = false;
                             BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationName is null or not a String");
                         }
-                    }
-                    else{
+                    } else {
                         check = false;
                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationName does not exist");
                     }
 
                     //applicationVersion
-                    if((linkedHashMapDeviceDescription.containsValue("applicationVersion"))){
+                    if ((linkedHashMapDeviceDescription.containsKey("applicationVersion"))) {
 
-                        if(linkedHashMapDeviceDescription.get("applicationVersion") == null || linkedHashMapDeviceDescription.get("applicationVersion") instanceof String == false){
+                        if (linkedHashMapDeviceDescription.get("applicationVersion") == null || linkedHashMapDeviceDescription.get("applicationVersion") instanceof String == false) {
                             check = false;
                             BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationVersion is null or not a String");
                         }
-                    }
-                    else{
+                    } else {
                         check = false;
                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationVersion does not exist");
                     }
 
                     //imageVersion
-                    if((linkedHashMapDeviceDescription.containsValue("imageVersion"))){
+                    if ((linkedHashMapDeviceDescription.containsKey("imageVersion"))) {
 
-                        if(linkedHashMapDeviceDescription.get("imageVersion") == null || linkedHashMapDeviceDescription.get("imageVersion") instanceof String == false){
+                        if (linkedHashMapDeviceDescription.get("imageVersion") == null || linkedHashMapDeviceDescription.get("imageVersion") instanceof String == false) {
                             check = false;
                             BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: imageVersion is null or not a String");
                         }
-                    }
-                    else{
+                    } else {
                         check = false;
                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: imageVersion does not exist");
                     }
 
                     //os
-                    if((linkedHashMapDeviceDescription.containsValue("os"))){
+                    if ((linkedHashMapDeviceDescription.containsKey("os"))) {
 
-                        if(linkedHashMapDeviceDescription.get("os") == null || linkedHashMapDeviceDescription.get("os") instanceof String == false){
+                        if (linkedHashMapDeviceDescription.get("os") == null || linkedHashMapDeviceDescription.get("os") instanceof String == false) {
                             check = false;
                             BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: os is null or not a String");
                         }
-                    }
-                    else{
+                    } else {
                         check = false;
                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: os does not exist");
                     }
 
                     //javaVersion
-                    if((linkedHashMapDeviceDescription.containsValue("javaVersion"))){
+                    if ((linkedHashMapDeviceDescription.containsKey("javaVersion"))) {
 
-                        if(linkedHashMapDeviceDescription.get("javaVersion") == null || linkedHashMapDeviceDescription.get("javaVersion") instanceof String == false){
+                        if (linkedHashMapDeviceDescription.get("javaVersion") == null || linkedHashMapDeviceDescription.get("javaVersion") instanceof String == false) {
                             check = false;
                             BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: javaVersion is null or not a String");
                         }
-                    }
-                    else{
+                    } else {
                         check = false;
                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: javaVersion does not exist");
                     }
 
                     //deviceType
-                    if((linkedHashMapDeviceDescription.containsValue("deviceType"))){
+                    if ((linkedHashMapDeviceDescription.containsKey("deviceType"))) {
 
-                        if(linkedHashMapDeviceDescription.get("deviceType") == null || linkedHashMapDeviceDescription.get("deviceType") instanceof String == false){
+                        if (linkedHashMapDeviceDescription.get("deviceType") == null || linkedHashMapDeviceDescription.get("deviceType") instanceof String == false) {
                             check = false;
                             BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: deviceType is null or not a String");
                         }
-                    }
-                    else{
+                    } else {
                         check = false;
                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: deviceType does not exist");
                     }
                 }
-            }
-            else{
+            } else {
                 check = false;
                 BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription does not exist");
             }
 
             //Kontrolliert ob bei entities alles passt
-            for(Map.Entry e : map.entrySet())
-            if (e.getKey().equals("entities")) {
+            if (map.containsKey("entities")) {
 
-                if(e.getValue() != null){
-                    if (e.getValue() instanceof ArrayList) {
-                        ArrayList arrayList = (ArrayList) e.getValue(); // entities value: 3 LinkedHashMaps
+                String[] ids = new String[1000];
+                String[] types = new String[1000];
 
-                        //TODO[OBV]: Funktioniert nicht
-                        for (Object linkedHashMapEntities : arrayList) {
-                            if (linkedHashMapEntities instanceof LinkedHashMap) {
 
-                                // id
-                                if (((LinkedHashMap) linkedHashMapEntities).containsValue("id")) {
-                                    //TODO[OBV]: Code für check ob UUID gültig ist
-                                } else {
+                //Arraylist von Entities
+                if (map.get("entities") instanceof ArrayList) {
+                    ArrayList arrayList = (ArrayList) map.get("entities"); // entities value: 3 LinkedHashMaps
+
+                    if (arrayList.size() != 0) {
+
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            LinkedHashMap<Object, Object> a = (LinkedHashMap<Object, Object>) arrayList.get(i);
+
+                            //if (a.containsKey("id"))
+                            //    ids[i] = a.get("id").toString();
+
+                            if (a.containsKey("_type")) {
+                                types[i] = a.get("_type").toString();
+                            }
+                        }
+
+                        //id bzw UUID
+                        for (String id : ids) {
+
+                            if(id != null){
+                                CharSequence uuid = id;
+                                if (!checkUUID(uuid)) {
                                     check = false;
-                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: id does not exsist");
-                                }
-
-                                //_type
-                                if (((LinkedHashMap) linkedHashMapEntities).containsValue("_type")) {
-                                    if (!((LinkedHashMap) linkedHashMapEntities).get("_type").equals(fileName.getName())) {
-                                        check = false;
-                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: id is not equal to the filename");
-                                    }
-
-                                } else {
-                                    check = false;
-                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: _type does not exsist");
+                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: UUID is not correct");
                                 }
                             }
                         }
+
+
+                        //_type
+                        for (String type : types) {
+
+                            if (type != null){
+                                //TODO[OBV]: Optimieren
+                                type = type + ".json";
+                                String name = fileName.getName();
+                                if (!type.equals(name)) {
+                                    check = false;
+                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: _type is not correct");
+                                }
+                            }
+
+                        }
                     }
                 }
-
-            }
-
-            else {
+            } else {
                 check = false;
                 BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities does not exist");
             }
-
-            //Speichert check in hashMapCompareJsonSanityCheck
-            hashMapCompareJsonSanityCheck.put(fileName.getName(), check);
 
         } catch (JsonParseException e) {
             e.printStackTrace();
@@ -204,5 +213,17 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Speichert check in hashMapCompareJsonSanityCheck
+        hashMapCompareJsonSanityCheck.put(fileName.getName(), check);
+
+    }
+
+    public Boolean checkUUID(CharSequence uuid) {
+
+        Pattern pattern = Pattern.compile("'[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}'"); //Übersetzt den regulären Ausdruck in ein Pattern-Objekt (regex)
+        Matcher matcher = pattern.matcher(uuid); //Liefert ein Matcher-Objekt, das prüft (String ist schon eine CharSequence (input)
+
+        return matcher.matches();
     }
 }

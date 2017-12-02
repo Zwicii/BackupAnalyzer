@@ -133,7 +133,10 @@ public class BackupFileParserImpl implements BackupFileParser {
         for (Map.Entry e : JsonFileSanityCheckParser.hashMapCompareDeviceDescription.entrySet()) {
             if (value == null) {
                 value = (HashMap<Object, Object>) e.getValue();
-            } else if (!value.equals(e)) {
+                System.out.println("VALUE: " + value);
+                System.out.println("Entity: " + e.getValue());
+            }
+            if (!value.equals(e.getValue())) {
                 hashMapErrors.put(e.getKey().toString(), "Wrong deviceDescription");
                 return false;
             }
