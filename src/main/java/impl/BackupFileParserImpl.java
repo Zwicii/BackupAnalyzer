@@ -27,7 +27,7 @@ public class BackupFileParserImpl implements BackupFileParser {
 
     public HashMap<String, Boolean> hashMapBackupFileContents = new HashMap<>();
     public static HashMap<Integer, String> hashMapAllEntities = new HashMap<>();
-    public static HashMap<String,String> hashMapErrors = new HashMap<>();
+    public static HashMap<String, String> hashMapErrors = new HashMap<>();
 
 
     //Singleton Pattern
@@ -48,7 +48,7 @@ public class BackupFileParserImpl implements BackupFileParser {
         //Variables
         boolean found;
         int i = 0;
-        File directory = new File(filePath);
+        File directory = new File(filePath+"/backup");
         File[] fList = directory.listFiles(); //get all the files from a directory
 
 
@@ -59,7 +59,7 @@ public class BackupFileParserImpl implements BackupFileParser {
             i++;
 
             //JSONFileSanityParser
-            if(file.getName().endsWith(".json")){
+            if (file.getName().endsWith(".json")) {
                 jsonFileParserSanity.parse(getJSONFilePath(file));
             }
 
@@ -86,15 +86,15 @@ public class BackupFileParserImpl implements BackupFileParser {
         }
 
 
-
         //Schaut ob Alle Json-Files, md5.txt und backup.zip in backupfile enthalten sind
         {
+
             for (String name : getFile("BackupFileContents")) {
                 found = false;
 
-                for (File file : fList) {
-
+                for (File file : fList) { //TODO[OBV]: fList sind nur backup und backupaudio
                     if (name != null) { //Weil sonst NPE und file.getName = null in Checkresult hashmap
+
                         if (name.equals(file.getName())) {
                             found = true;
                             hashMapBackupFileContents.put(file.getName(), found);
@@ -126,7 +126,7 @@ public class BackupFileParserImpl implements BackupFileParser {
     }
 
     //Schaut ob alle Sub-Properties von deviceDescription gleich sind
-    public Boolean checkDeviceDescription(){
+    public Boolean checkDeviceDescription() {
 
         HashMap<Object, Object> value = null;
 
@@ -168,7 +168,7 @@ public class BackupFileParserImpl implements BackupFileParser {
         return names;
     }
 
-    public String getJSONFilePath(File file){
+    public String getJSONFilePath(File file) {
 
         return BackupAnalyserResource.home + "/Temp/IN/" + file.getName() + "/";
     }

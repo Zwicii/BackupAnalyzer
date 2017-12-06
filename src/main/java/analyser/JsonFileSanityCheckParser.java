@@ -164,40 +164,48 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
                         for (int i = 0; i < arrayList.size(); i++) {
                             LinkedHashMap<Object, Object> a = (LinkedHashMap<Object, Object>) arrayList.get(i);
 
-                            //if (a.containsKey("id"))
-                            //    ids[i] = a.get("id").toString();
+                            if (a.containsKey("id")){
+                                ids[i] = a.get("id").toString();
+                            }
+
 
                             if (a.containsKey("_type")) {
                                 types[i] = a.get("_type").toString();
                             }
                         }
 
-                        //id bzw UUID
-                        for (String id : ids) {
+                        //id: muss vorhanden sein, darf aber auch null sein
+                        //UUID: muss richtiges Format haben
+                        if(ids != null){
+                            for (int i=0 ; ids[i] != null ; i++) { //damit nicht das ganze Array durchlaufen wird
+                                String id = ids[i];
+                                if(id != null){
+                                    CharSequence uuid = id;
 
-                            if(id != null){
-                                CharSequence uuid = id;
-                                if (!checkUUID(uuid)) {
-                                    check = false;
-                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: UUID is not correct");
+                                    if (!checkUUID(uuid)) {
+                                         check = false;
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: UUID is not correct");
+                                    }
                                 }
                             }
                         }
 
 
-                        //_type
-                        for (String type : types) {
+
+                        //_type: muss gleich sein wie filename
+                        for (int i = 0; types[i] != null; i++ ) { //damit nicht das ganze Array durchlaufen wird
+
+                            String type = types[i];
 
                             if (type != null){
                                 //TODO[OBV]: Optimieren
-                                type = type + ".json";
+                                type = type + ".json"; // type muss gleich sein wie Filename
                                 String name = fileName.getName();
                                 if (!type.equals(name)) {
                                     check = false;
                                     BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: _type is not correct");
                                 }
                             }
-
                         }
                     }
                 }
@@ -221,9 +229,9 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
     public Boolean checkUUID(CharSequence uuid) {
 
-        Pattern pattern = Pattern.compile("'[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}'"); //Übersetzt den regulären Ausdruck in ein Pattern-Objekt (regex)
+        Pattern pattern = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f‌​]{4}-[0-9a-f]{12}$"); //Übersetzt den regulären Ausdruck in ein Pattern-Objekt (regex)
         Matcher matcher = pattern.matcher(uuid); //Liefert ein Matcher-Objekt, das prüft (String ist schon eine CharSequence (input)
 
-        return matcher.matches();
+        return matcher.matches(); //true oder false
     }
 }
