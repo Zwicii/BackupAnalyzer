@@ -1,8 +1,9 @@
 package impl;
 
 import analyser.*;
-import analyser.platformParser.PermissionParser;
-import analyser.platformParser.UserParser;
+import analyser.issParser.ActionSetParser;
+import analyser.issParser.ActivityCardParser;
+import analyser.platformParser.*;
 import interfaces.BackupFileParser;
 import interfaces.JsonFileParser;
 import server.BackupAnalyserResource;
@@ -18,12 +19,17 @@ import java.util.Scanner;
  */
 public class BackupFileParserImpl implements BackupFileParser {
 
+    private JsonFileParser jsonFileParserSanity = JsonFileSanityCheckParser.getInstance();
+
     private JsonFileParser jsonFileParserMedia = MediaParser.getInstance();
     private JsonFileParser jsonFileParserMediaCategory = MediaCategoryParser.getInstance();
-    private JsonFileParser jsonFileParserMediaStore = MediaStoreParser.getInstance();
+    private JsonFileParser jsonFileParserMigrationScript = MigrationScriptParser.getInstance();
+    private JsonFileParser jsonFIleParserActionSet = ActionSetParser.getInstance();
+    private JsonFileParser jsonFileParserActivityCard = ActivityCardParser.getInstance();
     private JsonFileParser jsonFileParserSecurityPermission = PermissionParser.getInstance();
     private JsonFileParser jsonFileParserUser = UserParser.getInstance();
-    private JsonFileParser jsonFileParserSanity = JsonFileSanityCheckParser.getInstance();
+
+    private JsonFileParser jsonFileParserMediaStore = MediaStoreParser.getInstance();
 
     public HashMap<String, Boolean> hashMapBackupFileContents = new HashMap<>();
     public static HashMap<Integer, String> hashMapAllEntities = new HashMap<>();
@@ -45,11 +51,17 @@ public class BackupFileParserImpl implements BackupFileParser {
 
     public void parseBackupFile(String filePath) {
 
-        //Variables
         boolean found;
         int i = 0;
-        File directory = new File(filePath+"/backup");
+        File directory = new File(filePath);
         File[] fList = directory.listFiles(); //get all the files from a directory
+
+        for (File file : fList) {
+            //JSONFileSanityParser
+            if (file.getName().endsWith(".json")) {
+                jsonFileParserSanity.parse(getJSONFilePath(file));
+            }
+        }
 
 
         for (File file : fList) { //for each = mit for schleife array durchlaufen und dann immer File file = fList[i]
@@ -58,37 +70,36 @@ public class BackupFileParserImpl implements BackupFileParser {
             hashMapAllEntities.put(i, file.getName());
             i++;
 
-            //JSONFileSanityParser
-            if (file.getName().endsWith(".json")) {
-                jsonFileParserSanity.parse(getJSONFilePath(file));
+
+            //JsonFileParser
+            if (file.getName().equals("com.commend.platform.mediastore.Media.json")) {
+                jsonFileParserMedia.parse(getJSONFilePath(file));
             }
 
-            if (file.getName().endsWith(".MediaCategory.json")) {
-                Main.logger.info("\nfound MediaCategory");
+            if (file.getName().equals("com.commend.platform.mediastore.MediaCategory.json")) {
                 jsonFileParserMediaCategory.parse(getJSONFilePath(file));
             }
 
+            if (file.getName().equals("com.commend.platform.db.MigrationScript.json")) {
+                jsonFileParserMigrationScript.parse(getJSONFilePath(file));
+            }
+
+            if (file.getName().equals("com.commend.iss.activity.ActionSet.json")) {
+                jsonFIleParserActionSet.parse(getJSONFilePath(file));
+            }
+
+            if (file.getName().equals("com.commend.iss.activity.ActivityCard.json")) {
+                jsonFileParserActivityCard.parse(getJSONFilePath(file));
+            }
+
+            //MediaStoreParser
             if (file.getName().equals("mediastore")) {
-                Main.logger.info("\nfound mediastore");
                 jsonFileParserMediaStore.parse(getJSONFilePath(file));
             }
-
-            if (file.getName().endsWith("Permission.json")) {
-                Main.logger.info("\nfound Permission");
-                jsonFileParserSecurityPermission.parse(getJSONFilePath(file));
-            }
-
-            if (file.getName().endsWith("User.json")) {
-                Main.logger.info("\nfound User");
-                jsonFileParserUser.parse(getJSONFilePath(file));
-            }
-
         }
-
 
         //Schaut ob Alle Json-Files, md5.txt und backup.zip in backupfile enthalten sind
         {
-
             for (String name : getFile("BackupFileContents")) {
                 found = false;
 
@@ -141,7 +152,6 @@ public class BackupFileParserImpl implements BackupFileParser {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -164,7 +174,6 @@ public class BackupFileParserImpl implements BackupFileParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return names;
     }
 

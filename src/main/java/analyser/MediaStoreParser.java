@@ -3,6 +3,7 @@ package analyser;
 import interfaces.JsonFileParser;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -11,8 +12,7 @@ import java.util.HashMap;
 public class MediaStoreParser implements JsonFileParser {
 
     private static MediaStoreParser instance = null;
-    public static HashMap<Integer, String> hashMapMediaStore = new HashMap<>(); //Beinhaltet alle Daten im Mediastore, wei map von den json Files
-
+    public static ArrayList<String> arrayListMediaStore = new ArrayList<>();//Beinhaltet alle Daten im Mediastore, wei map von den json Files
     private MediaStoreParser() {
     }
 
@@ -25,7 +25,6 @@ public class MediaStoreParser implements JsonFileParser {
 
     @Override
     public void parse(String filePath) {
-        int j = 0;
         File MediaStore = new File(filePath);
         File[] MediaStoreFileList = MediaStore.listFiles();
 
@@ -42,10 +41,8 @@ public class MediaStoreParser implements JsonFileParser {
 
                     if (SoundsFileList != null) {
                         for (File fileSounds : SoundsFileList) { //parse Sounds
-
                             Main.logger.info(fileSounds.getName());
-                            hashMapMediaStore.put(j, fileSounds.getName());
-                            j++;
+                            arrayListMediaStore.add(fileSounds.getName());
                         }
                     }
                 }
@@ -62,14 +59,12 @@ public class MediaStoreParser implements JsonFileParser {
                         for (File fileSnapshots : SnapshotsFileList) { //parse Snapshots
 
                             Main.logger.info(fileSnapshots.getName());
-                            hashMapMediaStore.put(j, fileSnapshots.getName());
-                            j++;
+                            arrayListMediaStore.add(fileSnapshots.getName());
                         }
                     }
                 }
             }
         }
-
-        Store.storeOriginalData(MediaStore.getName(), hashMapMediaStore);
+        Store.storeOriginalData(MediaStore.getName(), arrayListMediaStore);
     }
 }

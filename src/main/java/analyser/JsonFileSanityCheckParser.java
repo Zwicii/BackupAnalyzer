@@ -49,6 +49,7 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
                     new TypeReference<Map<String, Object>>() {
                     });
 
+
             //Alle Daten in hashMap Original Data speichern
             Store.storeOriginalData(fileName.getName(), map);
 

@@ -34,26 +34,7 @@ public class PermissionParser implements JsonFileParser {
     public void parse(String filePath) {
 
         File fileName = new File(filePath);
-
-        try {
-
-            ObjectMapper mapper = new ObjectMapper(); //converting between Java objects and matching JSON constructs.
-
-            // read JSON from a file and put it into map
-            Map<String, Object> map = mapper.readValue(
-                    new File(filePath),
-                    new TypeReference<Map<String, Object>>() {
-                    });
-
-            Store.storeOriginalData(fileName.getName(), map);
-
-        } catch (JsonGenerationException e) {
-            Main.logger.error("JsonGenerationException: ", e);
-        } catch (JsonMappingException e) {
-            Main.logger.error("JsonMappingException: ", e);
-        } catch (IOException e) {
-            Main.logger.error("IOException: ", e);
-        }
+        Map<Object, Object> map = (Map<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.security.Permission.json");
 
     }
 }
