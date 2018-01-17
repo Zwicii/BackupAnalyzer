@@ -61,6 +61,11 @@ public class BackupFileParserImpl implements BackupFileParser {
             if (file.getName().endsWith(".json")) {
                 jsonFileParserSanity.parse(getJSONFilePath(file));
             }
+
+            //MediaStoreParser sonst ist bei MediaStoreParser.arrayListMediaStore nichts drinnen wenn bei MediaParser abgeprüft wird
+            if (file.getName().equals("mediastore")) {
+                jsonFileParserMediaStore.parse(getJSONFilePath(file));
+            }
         }
 
 
@@ -92,10 +97,7 @@ public class BackupFileParserImpl implements BackupFileParser {
                 jsonFileParserActivityCard.parse(getJSONFilePath(file));
             }
 
-            //MediaStoreParser
-            if (file.getName().equals("mediastore")) {
-                jsonFileParserMediaStore.parse(getJSONFilePath(file));
-            }
+
         }
 
         //Schaut ob Alle Json-Files, md5.txt und backup.zip in backupfile enthalten sind

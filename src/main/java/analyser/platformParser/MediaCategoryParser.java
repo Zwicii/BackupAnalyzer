@@ -1,5 +1,6 @@
 package analyser.platformParser;
 
+import analyser.MediaStoreParser;
 import analyser.Store;
 import impl.BackupFileParserImpl;
 import interfaces.JsonFileParser;
@@ -59,7 +60,7 @@ public class MediaCategoryParser implements JsonFileParser {
                                 check = false;
                                 BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: name is null");
                             }else{
-                                arrayListNames.add((String)e.get("names"));
+                                arrayListNames.add((String)e.get("name"));
                             }
                         } else {
                             check = false;
@@ -105,6 +106,20 @@ public class MediaCategoryParser implements JsonFileParser {
                                     if((Integer) e.get("usedSpace") > (Integer) e.get("maxSpace")){
                                         check = false;
                                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace has e higher value than maxSpace");
+                                    }
+                                }
+
+                                if(e.get("name") == "sounds"){
+                                    if((long)e.get("usedSpace") != MediaStoreParser.spaceSounds){
+                                        check = false;
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace is not equal with the value of the directory sounds ");
+                                    }
+                                }
+
+                                if(e.get("name") == "snapshots"){
+                                    if((long)e.get("usedSpace") != MediaStoreParser.spaceSnapshots){
+                                        //check = false;
+                                        //BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace is not equal with the value of the directory snapshots ");
                                     }
                                 }
                             }

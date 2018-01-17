@@ -54,7 +54,7 @@ public class ActivityCardParser implements JsonFileParser {
                         //activityEvent: ob existiert, ob nicht null ist und ob properties _type und id enthalten sind
                         if (!a.containsKey("activityEvent")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: activityEvent does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: activityEvent does not exist");
                         }
 
                         if (a.get("activityEvent") != null) {
@@ -62,16 +62,16 @@ public class ActivityCardParser implements JsonFileParser {
                             HashMap<String, String> hashMapActivitySet = (HashMap<String, String>) a.get("activityEvent");
                             if (!hashMapActivitySet.containsKey("_type")) {
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: activityEvent does not contain property _type");
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: activityEvent does not contain property _type");
                             }
                             if (!hashMapActivitySet.containsKey("id")) {
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: activityEvent does not contain property id");
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: activityEvent does not contain property id");
                             }
 
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: activityEvent is null");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: activityEvent is null");
                         }
 
                         //actionSet: ob existiert, ob Property _type und id enthalten sind oder darf auch null sein
@@ -82,34 +82,39 @@ public class ActivityCardParser implements JsonFileParser {
                                 HashMap<String, String> hashMapActionSet = (HashMap<String, String>) a.get("actionSet");
                                 if (!hashMapActionSet.containsKey("_type")) {
                                     check = false;
-                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: actionSet does not contain property _type");
+                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: actionSet does not contain property _type");
                                 }
                                 if (!hashMapActionSet.containsKey("id")) {
                                     check = false;
-                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: actionSet does not contain property id");
+                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: actionSet does not contain property id");
                                 }
                             }
 
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: actionSet does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: actionSet does not exist");
                         }
 
                         //telephonyState: ob existiert
                         if (!a.containsKey("telephonyState")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: telephonyState does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: telephonyState does not exist");
                         }
-                        if (a.get("telephonyState") != null || a.get("telephonyState") != "INITIALIZING" || a.get("telephonyState") != "IDLE"
-                                || a.get("telephonyState") != "ACTIVE" || a.get("telephonyState") != "RINGING" || a.get("telephonyState") != "DIALLING" || a.get("telephonyState") != "ERROR") {
+
+                        if (a.get("telephonyState") == null || a.get("telephonyState").equals("INITIALIZING") || a.get("telephonyState").equals("IDLE")
+                                || a.get("telephonyState").equals("ACTIVE") || a.get("telephonyState").equals("RINGING") || a.get("telephonyState").equals("DIALLING")
+                                || a.get("telephonyState").equals("ERROR") ) {
+                            continue;
+                        }
+                        else{
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: telephonyState has the wrong value");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: telephonyState has the wrong value");
                         }
 
                         //system: ob existiert
                         if (!a.containsKey("system")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: system does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity[" + i + "]: system does not exist");
                         }
                     }
                 }

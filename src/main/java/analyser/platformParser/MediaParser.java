@@ -155,37 +155,19 @@ public class MediaParser implements JsonFileParser {
 
     public static void compareMedia() {
 
-        String[] arrMedia = Store.getMedia(); //Data which will be compared from Media
-        Object[] arrMediaCategory = Store.getMediaCategory(); //Data which will be compared from MediaCategory
+        ArrayList<Object> arrayListMedia = Store.getMedia();
+        ArrayList<Object> arrayListMediaCategory = Store.getMediaCategory();
 
-        for (int i = 0; arrMedia[i] != null; i++) {
-
+        for(Object o : arrayListMedia){
             boolean found = false;
 
-            for (int j = 0; arrMediaCategory[j] != null; j++) {
-
-                if (arrMedia[i].equals(arrMediaCategory[j])) {//look if arrMediaCategory[] contains arrMedia[i]
-                    Main.logger.info(arrMedia[i] + ": OK - found in Media Category");
-                    found = true;
-                    hashMapCompareMedia.put(arrMedia[i], found);
-                    j++;
-                    break;
-                }
+            if(arrayListMediaCategory.contains(o) || MediaStoreParser.arrayListMediaStore.contains(o)){
+                found = true;
             }
-
-            for (int l = 0; l < MediaStoreParser.arrayListMediaStore.size(); l++) {//look if hashMapMediaStore contains arrMedia[i]
-                if (arrMedia[i].equals(MediaStoreParser.arrayListMediaStore.get(l))) {
-                    Main.logger.info(arrMedia[i] + ": OK - found in Media Store");
-                    found = true;
-                    hashMapCompareMedia.put(arrMedia[i], found);
-                    break;
-                }
-            }
-
-            if (!found) {
-                Main.logger.error(arrMedia[i] + ": MediaCategory or Data in MediaStore doesn't exist");
-                hashMapCompareMedia.put(arrMedia[i], found);
-                BackupFileParserImpl.hashMapErrors.put(arrMedia[i], "MediaCategory or Data in MediaStore does not exist");
+            else {
+                Main.logger.error(o + ": Data in MediaStore or MediaCategory doesn't exist");
+                hashMapCompareMedia.put(o.toString(), found);
+                BackupFileParserImpl.hashMapErrors.put(o.toString(), "Data in MediaStore or MediaCategory does not exist");
             }
         }
     }

@@ -4,7 +4,6 @@ import interfaces.JsonFileParser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * parse directory mediastore
@@ -12,7 +11,10 @@ import java.util.HashMap;
 public class MediaStoreParser implements JsonFileParser {
 
     private static MediaStoreParser instance = null;
-    public static ArrayList<String> arrayListMediaStore = new ArrayList<>();//Beinhaltet alle Daten im Mediastore, wei map von den json Files
+    public static ArrayList<Object> arrayListMediaStore = new ArrayList<>();//Beinhaltet alle Daten im Mediastore, wei map von den json Files
+    public static long spaceSnapshots = 0;
+    public static long spaceSounds = 0;
+
     private MediaStoreParser() {
     }
 
@@ -22,6 +24,7 @@ public class MediaStoreParser implements JsonFileParser {
         }
         return instance;
     }
+
 
     @Override
     public void parse(String filePath) {
@@ -34,6 +37,8 @@ public class MediaStoreParser implements JsonFileParser {
                 if (fileMediaStore.getName().equals("sounds")) {
 
                     Main.logger.info("\nfound sounds");
+
+                    spaceSounds = fileMediaStore.length(); //spaceSounds wird auf die Größe des Ordners Sounds gesetzt
 
                     final String soundsPath = filePath + "sounds";
                     File Sounds = new File(soundsPath);
@@ -49,7 +54,7 @@ public class MediaStoreParser implements JsonFileParser {
 
                 if (fileMediaStore.getName().equals("snapshots")) {
 
-                    Main.logger.info("\nfound snapshots");
+                    spaceSnapshots = fileMediaStore.length(); //spaceSnapshots wird auf die Größe des Ordners Snapshots gesetzt
 
                     final String snapshotsPath = filePath + "snapshots";
                     File Snapshots = new File(snapshotsPath);

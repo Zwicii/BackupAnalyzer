@@ -24,62 +24,73 @@ public class Store {
         Main.logger.info("Key: " + key + " " + "Value: " + value);
     }
 
-    public static Object[] getMediaCategory() {
-        Object[] arr = new Object[1000];
-        int k = 0;
+    public static ArrayList<Object> getMediaCategory() {
+
+        ArrayList<Object> arrayListMediaCategory = new ArrayList<>();
         //get all Data from MediaCategory
         HashMap<Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.MediaCategory.json");
 
         if (map.get("entities") instanceof ArrayList) {
-            ArrayList arrayList = (ArrayList) map.get("entities"); // entities value: 3 LinkedHashMaps
+            ArrayList arrayListEntities = (ArrayList) map.get("entities"); // entities value: 3 LinkedHashMaps
 
-            for (int i = 0; i < arrayList.size(); i++) {
+            for (Object entity : arrayListEntities) {
 
-                if (arrayList.get(i) instanceof LinkedHashMap) {
+                if (entity instanceof LinkedHashMap) {
 
-                    LinkedHashMap<Object, Object> hashMap = (LinkedHashMap<Object, Object>) arrayList.get(i); //Hashmap for every entry (sound/snapshots)
-                    arr[k] = hashMap.get("id");
-                    k++;
-                    arr[k] = hashMap.get("name");
-                    k++;
-                    arr[k] = hashMap.get("maxSpace");
-                    k++;
-                    arr[k] = hashMap.get("usedSpace");
-                    k++;
+                    LinkedHashMap<Object, Object> linkedHashMap = (LinkedHashMap<Object, Object>) ((LinkedHashMap) entity);
+
+                    if (linkedHashMap.containsKey("id")) {
+                        arrayListMediaCategory.add(linkedHashMap.get("id"));
+                    }
+                    if (linkedHashMap.containsKey("name")) {
+                        arrayListMediaCategory.add(linkedHashMap.get("name"));
+                    }
+                    if (linkedHashMap.containsKey("maxSpace")) {
+                        arrayListMediaCategory.add(linkedHashMap.get("maxSpace"));
+                    }
+                    if (linkedHashMap.containsKey("usedSpace")) {
+                        arrayListMediaCategory.add(linkedHashMap.get("usedSpace"));
+                    }
                 }
             }
         }
-        return arr;
+        return arrayListMediaCategory;
     }
 
-    public static String[] getMedia() {
-        String[] arr = new String[1000];
-        int k = 0;
+    public static ArrayList<Object> getMedia() {
+        //String[] arr = new String[1000];
+        //int k = 0;
         // get all Data from Media
         HashMap<Object, Object> map = (HashMap<Object, Object>) Store.hashMapOriginalData.get("com.commend.platform.mediastore.Media.json");
+        ArrayList<Object> arrayListMedia = new ArrayList<>();
 
         if (map.get("entities") instanceof ArrayList) {
 
-            ArrayList arrayList = (ArrayList) map.get("entities");
+            ArrayList arrayListEntities = (ArrayList) map.get("entities");
 
-            for (int i = 0; i < arrayList.size(); i++) {
+            for (Object entity : arrayListEntities) {
 
-                Main.logger.info(arrayList.get(i));
+                if (entity instanceof LinkedHashMap) {
 
-                if (arrayList.get(i) instanceof LinkedHashMap) {
+                    LinkedHashMap<Object, Object> linkedHashMap = (LinkedHashMap<Object, Object>) ((LinkedHashMap) entity);
 
-                    LinkedHashMap<Object, Object> hashMapM = (LinkedHashMap<Object, Object>) arrayList.get(i); //Hashmap for every entry
+                    if (linkedHashMap.containsKey("id")) {
+                        arrayListMedia.add(linkedHashMap.get("id"));
+                    }
+                    if (linkedHashMap.containsKey("mediaCategory")) {
+                        LinkedHashMap<Object, Object> linkedHashMapMediaCategory = (LinkedHashMap<Object, Object>) linkedHashMap.get("mediaCategory"); //eigene Hashmap für MediaCategory
 
-                    arr[k] = (String) hashMapM.get("id");
-                    k++;
-                    LinkedHashMap<Object, Object> hashMapMC = (LinkedHashMap<Object, Object>) hashMapM.get("mediaCategory"); //eigene Hashmap für MediaCategory
-                    arr[k] = (String) hashMapMC.get("id");
-                    k++;
-                    arr[k] = (String) hashMapMC.get("name");
-                    k++;
+                        if (linkedHashMapMediaCategory.containsKey("id")) {
+                            arrayListMedia.add(linkedHashMapMediaCategory.get("id"));
+                        }
+
+                        if (linkedHashMapMediaCategory.containsKey("name")) {
+                            arrayListMedia.add(linkedHashMapMediaCategory.get("name"));
+                        }
+                    }
                 }
             }
         }
-        return arr;
+        return arrayListMedia;
     }
 }
