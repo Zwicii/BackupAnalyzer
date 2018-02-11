@@ -58,86 +58,91 @@ public class MediaCategoryParser implements JsonFileParser {
                         if (e.containsKey("name")) {
                             if (e.get("name") == null) {
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: name is null");
-                            }else{
-                                arrayListNames.add((String)e.get("name"));
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitv [" + i + "]: name is null");
+                            } else {
+                                if (!arrayListNames.contains(e.get("name"))) {
+                                    arrayListNames.add((String) e.get("name"));
+                                }
                             }
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: name does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitv [" + i + "]: name does not exist");
                         }
 
                         //system: ob existiert
                         if (!e.containsKey("system")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: system does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: system does not exist");
                         }
 
                         //userMayAdd: ob existiert
                         if (!e.containsKey("userMayAdd")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: userMayAdd does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: userMayAdd does not exist");
                         }
 
                         //userMayEdit: ob existiert
                         if (!e.containsKey("userMayEdit")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: userMayEdit does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: userMayEdit does not exist");
                         }
 
                         //userMayDelete: ob existiert
                         if (!e.containsKey("userMayDelete")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: userMayDelete does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: userMayDelete does not exist");
                         }
 
                         //sorting: ob existiert
                         if (e.containsKey("sorting")) {
-                            arrayListSortings.add((Integer)e.get("sorting"));
+                            if (!arrayListSortings.contains(e.get("sorting"))) {
+                                arrayListSortings.add((Integer) e.get("sorting"));
+                            }
+
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: sorting does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: sorting does not exist");
                         }
 
                         //maxSpace: ob existiert und ob useSpace kleiner als maxSpace ist
                         if (e.containsKey("maxSpace")) {
-                            if(e.containsKey("usedSpace")){
-                                if(e.get("maxSpace") != null && e.get("usedSpace") != null){
-                                    if((Integer) e.get("usedSpace") > (Integer) e.get("maxSpace")){
+                            if (e.containsKey("usedSpace")) {
+                                if (e.get("maxSpace") != null && e.get("usedSpace") != null) {
+                                    if ((Integer) e.get("usedSpace") > (Integer) e.get("maxSpace")) {
                                         check = false;
-                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace has e higher value than maxSpace");
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace has e higher value than maxSpace");
                                     }
                                 }
 
-                                if(e.get("name") == "sounds"){
-                                    if((long)e.get("usedSpace") != MediaStoreParser.spaceSounds){
+                                if (e.get("name") == "sounds") {
+                                    if ((long) e.get("usedSpace") != MediaStoreParser.spaceSounds) {
                                         check = false;
-                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace is not equal with the value of the directory sounds ");
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace is not equal with the value of the directory sounds ");
                                     }
                                 }
 
-                                if(e.get("name") == "snapshots"){
-                                    if((long)e.get("usedSpace") != MediaStoreParser.spaceSnapshots){
-                                        //check = false;
-                                        //BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace is not equal with the value of the directory snapshots ");
+                                if (e.get("name") == "snapshots") {
+                                    if ((long) e.get("usedSpace") != MediaStoreParser.spaceSnapshots) {
+                                        check = false;
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace is not equal with the value of the directory snapshots ");
                                     }
                                 }
                             }
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: maxSpace does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: maxSpace does not exist");
                         }
 
                         //usedSpace: ob existiert
                         if (!e.containsKey("usedSpace")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: usedSpace does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace does not exist");
                         }
 
                         //circularBuffer: ob existiert
                         if (!e.containsKey("circularBuffer")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: circularBuffer does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: circularBuffer does not exist");
                         }
 
                         //alle Möglichen MediaCategories (avatar, sounds, snapshots) in arrayListMediaCategory speichern
@@ -146,12 +151,12 @@ public class MediaCategoryParser implements JsonFileParser {
 
                     }
                     //ob alle names unterschiedlich sind
-                    if(!checkNames(fileName)){
+                    if (!checkNames(fileName)) {
                         check = false;
                     }
 
                     //ob alle sortings unterschiedlich sind
-                    if(!checkSortings(fileName)){
+                    if (!checkSortings(fileName)) {
                         check = false;
                     }
                 }
@@ -162,35 +167,37 @@ public class MediaCategoryParser implements JsonFileParser {
 
     public Boolean checkNames(File filename) {
 
-        String value = null;
+        Boolean check = true;
 
-        for(String name : arrayListNames){
+        for (String name : arrayListNames) {
 
-            value = name;
 
-            for(int i = 0; i < arrayListNames.size(); i++){
-                if(value.equals(arrayListNames.get(i))){
-                    BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entitie[" + i + "]: name is equal with the name of Entitie[" + arrayListNames.indexOf(name) + "]");
-                    return false;
+            for (int i = 0; i < arrayListNames.size(); i++) {
+                if (name.equals(arrayListNames.get(i))) {
+                    if (i != arrayListNames.indexOf(name)) {
+                        BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entity[" + i + "]: name is equal with the name of Entity[" + arrayListNames.indexOf(name) + "]");
+                        check = false;
+                    }
                 }
             }
-        }return true;
+        }
+        return check;
     }
 
     public Boolean checkSortings(File filename) {
 
-        int value = 0;
+        boolean check = true;
 
-        for(int sorting : arrayListSortings){
-
-            value = sorting;
-
-            for(int i = 0; i < arrayListSortings.size(); i++){
-                if(value == arrayListSortings.get(i)){
-                    BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entitie[" + i + "]: sorting is equal with the sorting of Entitie[" + arrayListNames.indexOf(sorting) + "]");
-                    return false;
+        for (int sorting : arrayListSortings) {
+            for (int i = 0; i < arrayListSortings.size(); i++) {
+                if (sorting == arrayListSortings.get(i)) {
+                    if (i != arrayListSortings.indexOf(sorting)) {
+                        BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entity[" + i + "]: sorting is equal with the sorting of Entity[" + arrayListNames.indexOf(sorting) + "]");
+                        check = false;
+                    }
                 }
             }
-        }return true;
+        }
+        return check;
     }
 }

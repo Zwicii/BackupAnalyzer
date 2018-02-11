@@ -1,6 +1,9 @@
 package impl;
 
-import analyser.*;
+import analyser.JsonFileSanityCheckParser;
+import analyser.Main;
+import analyser.MediaStoreParser;
+import analyser.Store;
 import analyser.issParser.ActionSetParser;
 import analyser.issParser.ActivityCardParser;
 import analyser.platformParser.*;
@@ -66,6 +69,11 @@ public class BackupFileParserImpl implements BackupFileParser {
             if (file.getName().equals("mediastore")) {
                 jsonFileParserMediaStore.parse(getJSONFilePath(file));
             }
+
+            //MediaCategoryParser sonst bei hashmapsMediaCategory kein Inhalt
+            if (file.getName().equals("com.commend.platform.mediastore.MediaCategory.json")) {
+                jsonFileParserMediaCategory.parse(getJSONFilePath(file));
+            }
         }
 
 
@@ -81,9 +89,6 @@ public class BackupFileParserImpl implements BackupFileParser {
                 jsonFileParserMedia.parse(getJSONFilePath(file));
             }
 
-            if (file.getName().equals("com.commend.platform.mediastore.MediaCategory.json")) {
-                jsonFileParserMediaCategory.parse(getJSONFilePath(file));
-            }
 
             if (file.getName().equals("com.commend.platform.db.MigrationScript.json")) {
                 jsonFileParserMigrationScript.parse(getJSONFilePath(file));

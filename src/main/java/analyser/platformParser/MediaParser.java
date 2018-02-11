@@ -66,54 +66,56 @@ public class MediaParser implements JsonFileParser {
                         if (e.containsKey("displayName")) {
                             if (e.get("displayName") == null) {
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: displayName is null");
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: displayName is null");
                             } else{
-                                arrayListDisplayNames.add((String)e.get("displayName"));
+                                if (!arrayListDisplayNames.contains(e.get("displayName"))) { //TODO[OBV]: speichert irgendwie displaynames 3 mal hinein
+                                    arrayListDisplayNames.add((String) e.get("displayName"));
+                                }
                             }
 
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: displayName does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: displayName does not exist");
                         }
 
                         //mimeType: ob existiert
                         if (!e.containsKey("mimeType")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: mimeType does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: mimeType does not exist");
                         }
 
                         //lastModified: ob existiert
                         if (!e.containsKey("lastModified")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: lastModified does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: lastModified does not exist");
                         }
 
                         //category: ob existiert
                         if (e.containsKey("category")) {
                             if(!MediaCategoryParser.arrayListNames.contains(e.get("category"))){
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: category has not the same value as name in MediaCategory");
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: category has not the same value as name in MediaCategory");
                             }
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: category does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: category does not exist");
                         }
 
                         //size: ob existiert
                         if (!e.containsKey("size")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: size does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: size does not exist");
                         }
 
                         //mediaCategory: ob existiert
                         if (e.containsKey("mediaCategory")) {
-                            if (!MediaCategoryParser.arrayListMediaCategories.contains(e)) {
+                            if (!MediaCategoryParser.arrayListMediaCategories.contains(e.get("mediaCategory"))) {
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: mediaCategory does not exist in com.commend.platform.mediastore.MediaCategory  ");
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: mediaCategory does not exist in com.commend.platform.mediastore.MediaCategory");
                             }
                         } else {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "]: mediaCategory does not exist");
+                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: mediaCategory does not exist");
                         }
 
                         //ob id gleich ist wie name von datei in mediastore
@@ -121,7 +123,7 @@ public class MediaParser implements JsonFileParser {
 
                             if(!MediaStoreParser.arrayListMediaStore.contains(e.get("id"))){
                                 check = false;
-                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entitie [" + i + "] in the directory mediastore is no file with the same name as the id: " + e.get("id"));
+                                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "] in the directory mediastore is no file with the same name as the id: " + e.get("id"));
                             }
                         }
                     }
@@ -137,19 +139,21 @@ public class MediaParser implements JsonFileParser {
 
     public Boolean checkDisplayNames(File filename) {
 
-        String value = null;
+        boolean check = true;
 
         for(String displayName: arrayListDisplayNames){
 
-            value = displayName;
-
             for(int i = 0; i< arrayListDisplayNames.size(); i++){
-                if(value.equals(arrayListDisplayNames.get(i))){
-                    BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entitie[" + i + "]: displayName is equal with the displayName of Entitie[" + arrayListDisplayNames.indexOf(displayName) + "]");
-                    return false;
+                if (displayName.equals(arrayListDisplayNames.get(i))) {
+                    if (i != arrayListDisplayNames.indexOf(displayName)) {
+                        BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entity[" + i + "]: displayName is equal with the displayName of Entity[" + arrayListDisplayNames.indexOf(displayName) + "]");
+                        check = false;
+                    }
+
                 }
             }
-        }return true;
+        }
+        return check;
     }
 
 
@@ -163,12 +167,13 @@ public class MediaParser implements JsonFileParser {
 
             if(arrayListMediaCategory.contains(o) || MediaStoreParser.arrayListMediaStore.contains(o)){
                 found = true;
+
             }
             else {
                 Main.logger.error(o + ": Data in MediaStore or MediaCategory doesn't exist");
-                hashMapCompareMedia.put(o.toString(), found);
                 BackupFileParserImpl.hashMapErrors.put(o.toString(), "Data in MediaStore or MediaCategory does not exist");
             }
+            hashMapCompareMedia.put(o.toString(), found);
         }
     }
 }
