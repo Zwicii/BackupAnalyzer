@@ -137,8 +137,23 @@ public class BackupFileParserImpl implements BackupFileParser {
             }
         }
 
-        Store.storeCheckResults("JsonFileSanityCheck", JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck);
-        Store.storeCheckResults("BackupFileContents", hashMapBackupFileContents); //directory.getName() = backupaudio.zip
+        //Speichert Ergebnisse von hashMapCOmpareJsonSanityCheck in hashmapCheckResults
+        if(JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck.containsValue("false")){
+            Store.storeCheckResults("JsonFileSanityCheck", false);
+        }
+        else {
+            Store.storeCheckResults("JsonFileSanityCheck", true);
+        }
+        //Store.storeCheckResults("JsonFileSanityCheck", JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck);
+
+        //Speichert Ergebnisse von hashMapBackupfileContent in hashMapCheckResults
+        if(hashMapBackupFileContents.containsValue("false")){
+            Store.storeCheckResults("BackupFileContents", false);
+        }
+        else {
+            Store.storeCheckResults("BackupFileContents", true);
+        }
+        //Store.storeCheckResults("BackupFileContents", hashMapBackupFileContents); //directory.getName() = backupaudio.zip
         Store.storeCheckResults("DeviceDescription", checkDeviceDescription());
 
     }

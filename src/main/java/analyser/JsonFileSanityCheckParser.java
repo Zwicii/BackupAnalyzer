@@ -20,6 +20,7 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
     public static HashMap<String, Boolean> hashMapCompareJsonSanityCheck = new HashMap<String, Boolean>();
     public static HashMap<String, HashMap> hashMapCompareDeviceDescription = new HashMap<String, HashMap>();
+    public static LinkedHashMap<String, String> linkedHashMapDeviceDescription = new LinkedHashMap<>();
 
     //Singleton Pattern
     private static JsonFileSanityCheckParser instance = null;
@@ -69,7 +70,7 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
                 if (map.get("deviceDescription") instanceof LinkedHashMap) {
 
                     //Alle Hasmaps von deviceDescription
-                    LinkedHashMap<Object, Object> linkedHashMapDeviceDescription = (LinkedHashMap<Object, Object>) ((LinkedHashMap) map.get("deviceDescription"));
+                    linkedHashMapDeviceDescription = (LinkedHashMap<String, String>) ((LinkedHashMap) map.get("deviceDescription"));
                     hashMapCompareDeviceDescription.put(fileName.getName(), linkedHashMapDeviceDescription);
 
                     //applicationName

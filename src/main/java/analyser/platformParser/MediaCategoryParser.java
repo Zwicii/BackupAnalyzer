@@ -32,6 +32,7 @@ public class MediaCategoryParser implements JsonFileParser {
     public static ArrayList<String> arrayListNames = new ArrayList<>();
     private ArrayList<Integer> arrayListSortings = new ArrayList<>();
     public static ArrayList<HashMap<Object, Object>> arrayListMediaCategories = new ArrayList<>();
+    public static HashMap<String, Integer> hashMapStorage = new HashMap<>();
 
 
     @Override
@@ -114,18 +115,34 @@ public class MediaCategoryParser implements JsonFileParser {
                                     }
                                 }
 
-                                if (e.get("name") == "sounds") {
-                                    if ((long) e.get("usedSpace") != MediaStoreParser.spaceSounds) {
+                                if (e.get("name").equals("sounds")) {
+                                    if ((Integer) e.get("usedSpace") != MediaStoreParser.spaceSounds) {
                                         check = false;
                                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace is not equal with the value of the directory sounds ");
                                     }
+
+                                    if((Integer) e.get("maxSpace") < (Integer) e.get("usedSpace")){
+                                        check = false;
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace has a higher value than maxSpace ");
+                                    }
+
+                                    hashMapStorage.put(e.get("name")+ "_maxSpace", (Integer) e.get("maxSpace"));
+                                    hashMapStorage.put(e.get("name")+ "_usedSpace", (Integer) e.get("usedSpace"));
                                 }
 
-                                if (e.get("name") == "snapshots") {
-                                    if ((long) e.get("usedSpace") != MediaStoreParser.spaceSnapshots) {
+                                if (e.get("name").equals("snapshots")) {
+                                    if ((Integer) e.get("usedSpace") != MediaStoreParser.spaceSnapshots) {
                                         check = false;
                                         BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace is not equal with the value of the directory snapshots ");
                                     }
+
+                                    if((Integer) e.get("maxSpace") < (Integer) e.get("usedSpace")){
+                                        check = false;
+                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entity [" + i + "]: usedSpace has a higher value than maxSpace ");
+                                    }
+
+                                    hashMapStorage.put(e.get("name")+ "_maxSpace", (Integer) e.get("maxSpace"));
+                                    hashMapStorage.put(e.get("name")+ "_usedSpace", (Integer) e.get("usedSpace"));
                                 }
                             }
                         } else {

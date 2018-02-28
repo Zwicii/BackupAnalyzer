@@ -1,7 +1,10 @@
 package server;
 
+import analyser.JsonFileSanityCheckParser;
 import analyser.Main;
+import analyser.MediaStoreParser;
 import analyser.Store;
+import analyser.platformParser.MediaCategoryParser;
 import impl.BackupFileParserImpl;
 import impl.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipFile;
 
 /**
  * REST Interface für Nutzer um über HTTP auf Daten zugreifen zu können
@@ -32,6 +36,8 @@ public class BackupAnalyserResource {
     public static String home = System.getProperty("user.home"); //home Verzeichnis
     private String sourcePathUnzip = home + "/Temp/";
     private String sourcePathZip = home + "/Temp/";
+    //Anfangspfad wo man auswählen kann wo File gespeichert werden kann
+    public static final String UPLOAD_FILE_SERVER = BackupAnalyserResource.home + "/Documents/Schule/Matura Projekt";
 
     private BackupFileParser backupFileParser = BackupFileParserImpl.getInstance();
     private ZipFileService zipFileService = ZipFileServiceImpl.getInstance();
@@ -47,6 +53,25 @@ public class BackupAnalyserResource {
     public String test(@QueryParam("name") String name) { //?name=Victoria
         System.out.println(name);
         return "{}";
+    }
+
+    @GET
+    @Path("/DeviceDescription")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String DeviceDescription() {
+        JSONObject jsonDeviceDescription = new JSONObject(JsonFileSanityCheckParser.linkedHashMapDeviceDescription);
+        Main.logger.info("DeviceDescription");
+        return jsonDeviceDescription.toString();
+        //return "{\"asdf\": true}";
+    }
+
+    @GET
+    @Path("/Space")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Storage() {
+        JSONObject jsonSpace = new JSONObject(MediaCategoryParser.hashMapStorage);
+        Main.logger.info("Space");
+        return jsonSpace.toString();
     }
 
     @GET
@@ -85,6 +110,22 @@ public class BackupAnalyserResource {
         Main.logger.info("Errors");
         return jsonErrors.toString();
     }
+
+
+    @GET
+    @Path("/repair")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response downloadFile() {
+
+        // set file (and path) to be download
+        File file = new File(BackupAnalyserResource.home + "/Documents/Schule/Matura Projekt/backup.zip");
+
+        Response.ResponseBuilder responseBuilder = Response.ok((Object) file);
+        responseBuilder.header("Content-Disposition", "attachment; filename=\"repairedBackup.zip\"");
+        return responseBuilder.build();
+    }
+
+
 
     @POST //POST-Request: Daten im BODY nach dem Header gesendet
     @Path("/upload")
