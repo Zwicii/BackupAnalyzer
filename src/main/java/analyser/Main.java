@@ -1,19 +1,16 @@
 package analyser;
 
-import impl.BackupFileParserImpl;
-import impl.ZipFileServiceImpl;
+import implementaions.BackupFileParserImpl;
+import implementaions.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
 import interfaces.ZipFileService;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import server.BackupAnalyserResource;
 import server.ServerRunner;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class Main {
 

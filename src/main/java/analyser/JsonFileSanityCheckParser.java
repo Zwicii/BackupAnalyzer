@@ -1,6 +1,6 @@
 package analyser;
 
-import impl.BackupFileParserImpl;
+import implementaions.BackupFileParserImpl;
 import interfaces.JsonFileParser;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -59,9 +59,13 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                 String type = (String) map.get("_type");
                 if (! type.equals("com.commend.iss.backup.DataContainer")) {
-                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "_type does not exist");
+                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Wrong _type");
                     check = false;
                 }
+            }
+            else {
+                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "_type does not exist");
+                check = false;
             }
 
             //Kontrolliert ob bei deviceDescription alles passt

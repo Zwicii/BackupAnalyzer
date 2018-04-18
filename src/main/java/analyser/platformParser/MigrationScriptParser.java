@@ -1,16 +1,10 @@
 package analyser.platformParser;
 
-import analyser.Main;
 import analyser.Store;
-import impl.BackupFileParserImpl;
+import implementaions.BackupFileParserImpl;
 import interfaces.JsonFileParser;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;

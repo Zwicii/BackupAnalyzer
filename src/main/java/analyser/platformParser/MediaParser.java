@@ -3,7 +3,7 @@ package analyser.platformParser;
 import analyser.Main;
 import analyser.MediaStoreParser;
 import analyser.Store;
-import impl.BackupFileParserImpl;
+import implementaions.BackupFileParserImpl;
 import interfaces.JsonFileParser;
 
 import java.io.File;
@@ -19,7 +19,7 @@ public class MediaParser implements JsonFileParser {
 
     // TODO [STC]: Diese Listen entfernen (nicht nötig)
     // Anstattdessen in compareMedia(...) direkt die entsprechenden Sub-Listen aus Store.hashMapOriginalData verwenden;
-    private static HashMap<String, Boolean> hashMapCompareMedia = new HashMap<>();
+    public static HashMap<String, Boolean> hashMapCompareMedia = new HashMap<>();
     private ArrayList<String> arrayListDisplayNames = new ArrayList<>();
 
     //Singleton Pattern

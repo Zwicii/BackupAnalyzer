@@ -1,4 +1,4 @@
-package impl;
+package implementaions;
 
 import analyser.Main;
 import analyser.Store;
@@ -155,6 +155,7 @@ public class ZipFileServiceImpl implements ZipFileService {
         } catch (IOException e) {
             Main.logger.error("IOException: ", e);
         }
+
     }
 
     public void zipFile(String File, String srcPath) {

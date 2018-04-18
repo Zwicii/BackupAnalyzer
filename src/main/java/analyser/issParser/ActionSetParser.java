@@ -1,7 +1,7 @@
 package analyser.issParser;
 
 import analyser.Store;
-import impl.BackupFileParserImpl;
+import implementaions.BackupFileParserImpl;
 import interfaces.JsonFileParser;
 
 import java.io.File;

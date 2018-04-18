@@ -38,7 +38,7 @@ public class MediaStoreParser implements JsonFileParser {
 
                     Main.logger.info("\nfound sounds");
 
-                    spaceSounds = fileMediaStore.length(); //spaceSounds wird auf die Größe des Ordners Sounds gesetzt
+                    spaceSounds = 0;
 
                     final String soundsPath = filePath + "sounds";
                     File Sounds = new File(soundsPath);
@@ -48,13 +48,15 @@ public class MediaStoreParser implements JsonFileParser {
                         for (File fileSounds : SoundsFileList) { //parse Sounds
                             Main.logger.info(fileSounds.getName());
                             arrayListMediaStore.add(fileSounds.getName());
+
+                            spaceSounds = spaceSounds + fileSounds.length();
                         }
                     }
                 }
 
                 if (fileMediaStore.getName().equals("snapshots")) {
 
-                    spaceSnapshots = fileMediaStore.length(); //spaceSnapshots wird auf die Größe des Ordners Snapshots gesetzt
+                    spaceSnapshots = 0;
 
                     final String snapshotsPath = filePath + "snapshots";
                     File Snapshots = new File(snapshotsPath);
@@ -65,6 +67,8 @@ public class MediaStoreParser implements JsonFileParser {
 
                             Main.logger.info(fileSnapshots.getName());
                             arrayListMediaStore.add(fileSnapshots.getName());
+
+                            spaceSnapshots = spaceSnapshots + fileSnapshots.length();
                         }
                     }
                 }

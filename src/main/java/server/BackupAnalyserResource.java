@@ -2,11 +2,10 @@ package server;
 
 import analyser.JsonFileSanityCheckParser;
 import analyser.Main;
-import analyser.MediaStoreParser;
 import analyser.Store;
 import analyser.platformParser.MediaCategoryParser;
-import impl.BackupFileParserImpl;
-import impl.ZipFileServiceImpl;
+import implementaions.BackupFileParserImpl;
+import implementaions.ZipFileServiceImpl;
 import interfaces.BackupFileParser;
 import interfaces.ZipFileService;
 import org.apache.commons.io.FileUtils;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipFile;
 
 /**
  * REST Interface für Nutzer um über HTTP auf Daten zugreifen zu können
@@ -169,15 +167,15 @@ public class BackupAnalyserResource {
                 Main.logger.debug("Parse");
                 backupFileParser.parseBackupFile(sourcePathUnzip);
 
-                Main.logger.debug("Zip");
-                File dirOUT = new File(sourcePathZip + "OUT");
-                dirOUT.mkdir();
-                sourcePathZip = dirOUT.getPath() + "/";
-                zipFileService.zip(fileNameZip, sourcePathZip);
+                //Main.logger.debug("Zip");
+                //File dirOUT = new File(sourcePathZip + "OUT");
+                //dirOUT.mkdir();
+                //sourcePathZip = dirOUT.getPath() + "/";
+                //zipFileService.zip(fileNameZip, sourcePathZip);
 
                 //directories IN and OUT löschen
                 FileUtils.deleteDirectory(dirIN);
-                FileUtils.deleteDirectory(dirOUT);
+                //FileUtils.deleteDirectory(dirOUT);
 
             } catch (IOException e) {
                 Main.logger.error("IOException: ", e);

@@ -1,4 +1,4 @@
-package impl;
+package implementaions;
 
 import analyser.JsonFileSanityCheckParser;
 import analyser.Main;
@@ -29,8 +29,6 @@ public class BackupFileParserImpl implements BackupFileParser {
     private JsonFileParser jsonFileParserMigrationScript = MigrationScriptParser.getInstance();
     private JsonFileParser jsonFIleParserActionSet = ActionSetParser.getInstance();
     private JsonFileParser jsonFileParserActivityCard = ActivityCardParser.getInstance();
-    private JsonFileParser jsonFileParserSecurityPermission = PermissionParser.getInstance();
-    private JsonFileParser jsonFileParserUser = UserParser.getInstance();
 
     private JsonFileParser jsonFileParserMediaStore = MediaStoreParser.getInstance();
 
@@ -54,6 +52,20 @@ public class BackupFileParserImpl implements BackupFileParser {
 
     public void parseBackupFile(String filePath) {
 
+        //Reset
+        hashMapBackupFileContents.clear();
+        hashMapAllEntities.clear();
+        hashMapErrors.clear();
+        Store.hashMapCheckResults.clear();
+        Store.hashMapOriginalData.clear();
+        MediaParser.hashMapCompareMedia.clear();
+        MediaCategoryParser.hashMapStorage.clear();
+        JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck.clear();
+        JsonFileSanityCheckParser.hashMapCompareDeviceDescription.clear();
+        JsonFileSanityCheckParser.linkedHashMapDeviceDescription.clear();
+
+
+
         boolean found;
         int i = 0;
         File directory = new File(filePath);
@@ -69,7 +81,9 @@ public class BackupFileParserImpl implements BackupFileParser {
             if (file.getName().equals("mediastore")) {
                 jsonFileParserMediaStore.parse(getJSONFilePath(file));
             }
+        }
 
+        for(File file: fList){
             //MediaCategoryParser sonst bei hashmapsMediaCategory kein Inhalt
             if (file.getName().equals("com.commend.platform.mediastore.MediaCategory.json")) {
                 jsonFileParserMediaCategory.parse(getJSONFilePath(file));
@@ -101,8 +115,6 @@ public class BackupFileParserImpl implements BackupFileParser {
             if (file.getName().equals("com.commend.iss.activity.ActivityCard.json")) {
                 jsonFileParserActivityCard.parse(getJSONFilePath(file));
             }
-
-
         }
 
         //Schaut ob Alle Json-Files, md5.txt und backup.zip in backupfile enthalten sind
