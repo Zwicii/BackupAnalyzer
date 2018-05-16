@@ -24,6 +24,7 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
     //Singleton Pattern
     private static JsonFileSanityCheckParser instance = null;
+    private int j = 0;
 
     private JsonFileSanityCheckParser() {
     }
@@ -59,7 +60,8 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                 String type = (String) map.get("_type");
                 if (! type.equals("com.commend.iss.backup.DataContainer")) {
-                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Wrong _type");
+                    BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Wrong _type");
+                    j++;
                     check = false;
                 }
             }
@@ -82,11 +84,13 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                         if (linkedHashMapDeviceDescription.get("applicationName") == null || linkedHashMapDeviceDescription.get("applicationName") instanceof String == false) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationName is null or not a String");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: applicationName is null or not a String");
+                            j++;
                         }
                     } else {
                         check = false;
-                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationName does not exist");
+                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: applicationName does not exist");
+                        j++;
                     }
 
                     //applicationVersion
@@ -94,11 +98,13 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                         if (linkedHashMapDeviceDescription.get("applicationVersion") == null || linkedHashMapDeviceDescription.get("applicationVersion") instanceof String == false) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationVersion is null or not a String");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: applicationVersion is null or not a String");
+                            j++;
                         }
                     } else {
                         check = false;
-                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: applicationVersion does not exist");
+                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: applicationVersion does not exist");
+                        j++;
                     }
 
                     //imageVersion
@@ -106,11 +112,13 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                         if (linkedHashMapDeviceDescription.get("imageVersion") == null || linkedHashMapDeviceDescription.get("imageVersion") instanceof String == false) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: imageVersion is null or not a String");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: imageVersion is null or not a String");
+                            j++;
                         }
                     } else {
                         check = false;
-                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: imageVersion does not exist");
+                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: imageVersion does not exist");
+                        j++;
                     }
 
                     //os
@@ -118,11 +126,13 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                         if (linkedHashMapDeviceDescription.get("os") == null || linkedHashMapDeviceDescription.get("os") instanceof String == false) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: os is null or not a String");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: os is null or not a String");
+                            j++;
                         }
                     } else {
                         check = false;
-                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: os does not exist");
+                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: os does not exist");
+                        j++;
                     }
 
                     //javaVersion
@@ -130,11 +140,13 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                         if (linkedHashMapDeviceDescription.get("javaVersion") == null || linkedHashMapDeviceDescription.get("javaVersion") instanceof String == false) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: javaVersion is null or not a String");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: javaVersion is null or not a String");
+                            j++;
                         }
                     } else {
                         check = false;
-                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: javaVersion does not exist");
+                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: javaVersion does not exist");
+                        j++;
                     }
 
                     //deviceType
@@ -142,16 +154,19 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
 
                         if (linkedHashMapDeviceDescription.get("deviceType") == null || linkedHashMapDeviceDescription.get("deviceType") instanceof String == false) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: deviceType is null or not a String");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: deviceType is null or not a String");
+                            j++;
                         }
                     } else {
                         check = false;
-                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription: deviceType does not exist");
+                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription: deviceType does not exist");
+                        j++;
                     }
                 }
             } else {
                 check = false;
-                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "deviceDescription does not exist");
+                BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "deviceDescription does not exist");
+                j++;
             }
 
             //Kontrolliert ob bei entities alles passt
@@ -189,8 +204,9 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
                                     CharSequence uuid = id;
 
                                     if (!checkUUID(uuid)) {
-                                         check = false;
-                                        BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: UUID is not correct");
+                                        check = false;
+                                        BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "entities: UUID is not correct");
+                                        j++;
                                     }
                                 }
                             }
@@ -209,7 +225,8 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
                                 String name = fileName.getName();
                                 if (!type.equals(name)) {
                                     check = false;
-                                    BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities: _type is not correct");
+                                    BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "entities: _type is not correct");
+                                    j++;
                                 }
                             }
                         }
@@ -217,7 +234,8 @@ public class JsonFileSanityCheckParser implements JsonFileParser {
                 }
             } else {
                 check = false;
-                BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "entities does not exist");
+                BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "entities does not exist");
+                j++;
             }
 
         } catch (JsonParseException e) {

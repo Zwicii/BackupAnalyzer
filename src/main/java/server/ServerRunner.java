@@ -41,12 +41,6 @@ public class ServerRunner {
             //load classes and resources from a search path of URLs referring to both JAR files and directories
             URLClassLoader urlClassLoader = (URLClassLoader) classLoader;
             urls = asList(urlClassLoader.getURLs());
-            // TODO [STC]: Weitere Beispiele/Tutorials zu Streams und Lambda Expressions in Java ansehen
-            // z.B.:    https://www.youtube.com/watch?v=Hl5XLAtpRog
-            //          https://www.youtube.com/watch?v=9Orn0Pwp3YU
-            //          https://www.youtube.com/watch?v=8pDm_kH4YKY
-            //          http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/
-            // TODO [STC]: Diesen Code-Block verstehen und gut kommentieren
             urls.stream()
                     .filter(url -> !url.toString().endsWith(".jar")) //Filtert alles mit .jar heraus
                     .filter(url -> url.toString().contains("resources")) //url: "file:/home/victoria/IdeaProjects/Victoria/build/resources/main"

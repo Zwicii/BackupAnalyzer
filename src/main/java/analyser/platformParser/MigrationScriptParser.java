@@ -15,6 +15,7 @@ import java.util.Map;
 public class MigrationScriptParser implements JsonFileParser {
 
     private static MigrationScriptParser instance = null;
+    private int j=0;
 
     private MigrationScriptParser() {
     }
@@ -48,11 +49,13 @@ public class MigrationScriptParser implements JsonFileParser {
                         //name: ob existiert und nicht null ist
                         if (!a.containsKey("name")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: name doesn not exist");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: name does not exist");
+                            j++;
                         }
                         if (a.get("name") == null) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: name is null");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: name is null");
+                            j++;
                         }
                     }
                 }

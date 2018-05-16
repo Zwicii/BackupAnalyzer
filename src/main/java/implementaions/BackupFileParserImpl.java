@@ -150,7 +150,7 @@ public class BackupFileParserImpl implements BackupFileParser {
         }
 
         //Speichert Ergebnisse von hashMapCOmpareJsonSanityCheck in hashmapCheckResults
-        if(JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck.containsValue("false")){
+        if(JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck.containsValue(false)){
             Store.storeCheckResults("JsonFileSanityCheck", false);
         }
         else {
@@ -159,7 +159,7 @@ public class BackupFileParserImpl implements BackupFileParser {
         //Store.storeCheckResults("JsonFileSanityCheck", JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck);
 
         //Speichert Ergebnisse von hashMapBackupfileContent in hashMapCheckResults
-        if(hashMapBackupFileContents.containsValue("false")){
+        if(hashMapBackupFileContents.containsValue(false)){
             Store.storeCheckResults("BackupFileContents", false);
         }
         else {

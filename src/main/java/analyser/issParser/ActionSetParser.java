@@ -15,6 +15,7 @@ import java.util.Map;
 public class ActionSetParser implements JsonFileParser {
 
     private static ActionSetParser instance = null;
+    private int j =0;
 
     private ActionSetParser() {
     }
@@ -50,17 +51,23 @@ public class ActionSetParser implements JsonFileParser {
                         //displayName: ob existiert
                         if (!a.containsKey("displayName")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: displayName doesn not exist");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: displayName does not exist");
+                            j++;
                         }
-                        if (a.get("displayName") == null) {
+                        else if (a.get("displayName") == null) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: displayName is null");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: displayName is null");
+                            j++;
+                        }
+                        else{
+                            arrayListDisplayNames.add(a.get("displayName").toString());
                         }
 
                         //system: ob existiert
                         if (!a.containsKey("system")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(fileName.getName(), "Entiti[" + i + "]: system doesn not exist");
+                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: system does not exist");
+                            j++;
                         }
                     }
                     //ob alle DisplayNames unterschiedlich sind
@@ -77,13 +84,14 @@ public class ActionSetParser implements JsonFileParser {
 
         String value = null;
 
-        for(String displayName: arrayListDisplayNames){
+        for(int i = 0; i < arrayListDisplayNames.size(); i++){
 
-            value = displayName;
+            value = arrayListDisplayNames.get(i);
 
-            for(int i = 0; i < arrayListDisplayNames.size(); i++){
-                if(value.equals(arrayListDisplayNames.get(i))){
-                    BackupFileParserImpl.hashMapErrors.put(filename.getName(), "Entitie[" + i + "]: displayName is equal with the displayName of Entitie[" + arrayListDisplayNames.indexOf(displayName) + "]");
+            for(int l = 0; l< arrayListDisplayNames.size(); l++){
+                if(l != i && value.equals(arrayListDisplayNames.get(l))){
+                    BackupFileParserImpl.hashMapErrors.put(j+" "+filename.getName(), "Entity[" + i + "]: displayName is equal with the displayName of Entity[" + l +"]");
+                    j++;
                     return false;
                 }
             }
