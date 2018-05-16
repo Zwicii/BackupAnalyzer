@@ -6,7 +6,9 @@ import analyser.MediaStoreParser;
 import analyser.Store;
 import analyser.issParser.ActionSetParser;
 import analyser.issParser.ActivityCardParser;
-import analyser.platformParser.*;
+import analyser.platformParser.MediaCategoryParser;
+import analyser.platformParser.MediaParser;
+import analyser.platformParser.MigrationScriptParser;
 import interfaces.BackupFileParser;
 import interfaces.JsonFileParser;
 import server.BackupAnalyserResource;
@@ -35,6 +37,7 @@ public class BackupFileParserImpl implements BackupFileParser {
     public HashMap<String, Boolean> hashMapBackupFileContents = new HashMap<>();
     public static HashMap<Integer, String> hashMapAllEntities = new HashMap<>();
     public static HashMap<String, String> hashMapErrors = new HashMap<>();
+    public static int errorNumber = 0;
 
 
     //Singleton Pattern
@@ -63,6 +66,7 @@ public class BackupFileParserImpl implements BackupFileParser {
         JsonFileSanityCheckParser.hashMapCompareJsonSanityCheck.clear();
         JsonFileSanityCheckParser.hashMapCompareDeviceDescription.clear();
         JsonFileSanityCheckParser.linkedHashMapDeviceDescription.clear();
+        errorNumber = 0;
 
 
 
@@ -122,7 +126,7 @@ public class BackupFileParserImpl implements BackupFileParser {
             for (String name : getFile("BackupFileContents")) {
                 found = false;
 
-                for (File file : fList) { //TODO[OBV]: fList sind nur backup und backupaudio
+                for (File file : fList) {
                     if (name != null) { //Weil sonst NPE und file.getName = null in Checkresult hashmap
 
                         if (name.equals(file.getName())) {
@@ -136,7 +140,8 @@ public class BackupFileParserImpl implements BackupFileParser {
                 if (name != null) {
                     if (!found) {
                         hashMapBackupFileContents.put(name, found);
-                        hashMapErrors.put(name, "File does not exists");
+                        hashMapErrors.put(BackupFileParserImpl.errorNumber + " " + name, "File does not exists");
+                        BackupFileParserImpl.errorNumber++;
                     }
                 }
             }

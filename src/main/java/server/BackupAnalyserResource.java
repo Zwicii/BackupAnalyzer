@@ -109,6 +109,14 @@ public class BackupAnalyserResource {
         return jsonErrors.toString();
     }
 
+    @GET
+    @Path("/ErrorNumber")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int ErrorNumber() {
+        Main.logger.info("ErrorNumber");
+        return BackupFileParserImpl.errorNumber;
+    }
+
 
     @GET
     @Path("/repair")

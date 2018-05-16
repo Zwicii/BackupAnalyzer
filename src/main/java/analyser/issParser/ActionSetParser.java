@@ -15,7 +15,6 @@ import java.util.Map;
 public class ActionSetParser implements JsonFileParser {
 
     private static ActionSetParser instance = null;
-    private int j =0;
 
     private ActionSetParser() {
     }
@@ -51,13 +50,13 @@ public class ActionSetParser implements JsonFileParser {
                         //displayName: ob existiert
                         if (!a.containsKey("displayName")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: displayName does not exist");
-                            j++;
+                            BackupFileParserImpl.hashMapErrors.put(BackupFileParserImpl.errorNumber + " " + fileName.getName(), "Entity[" + i + "]: displayName does not exist");
+                            BackupFileParserImpl.errorNumber++;
                         }
                         else if (a.get("displayName") == null) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: displayName is null");
-                            j++;
+                            BackupFileParserImpl.hashMapErrors.put(BackupFileParserImpl.errorNumber + " " + fileName.getName(), "Entity[" + i + "]: displayName is null");
+                            BackupFileParserImpl.errorNumber++;
                         }
                         else{
                             arrayListDisplayNames.add(a.get("displayName").toString());
@@ -66,8 +65,8 @@ public class ActionSetParser implements JsonFileParser {
                         //system: ob existiert
                         if (!a.containsKey("system")) {
                             check = false;
-                            BackupFileParserImpl.hashMapErrors.put(j+" "+fileName.getName(), "Entity[" + i + "]: system does not exist");
-                            j++;
+                            BackupFileParserImpl.hashMapErrors.put(BackupFileParserImpl.errorNumber + " " + fileName.getName(), "Entity[" + i + "]: system does not exist");
+                            BackupFileParserImpl.errorNumber++;
                         }
                     }
                     //ob alle DisplayNames unterschiedlich sind
@@ -82,16 +81,14 @@ public class ActionSetParser implements JsonFileParser {
 
     public Boolean checkDisplayNames(File filename) {
 
-        String value = null;
-
         for(int i = 0; i < arrayListDisplayNames.size(); i++){
 
-            value = arrayListDisplayNames.get(i);
+            String value = arrayListDisplayNames.get(i);
 
             for(int l = 0; l< arrayListDisplayNames.size(); l++){
                 if(l != i && value.equals(arrayListDisplayNames.get(l))){
-                    BackupFileParserImpl.hashMapErrors.put(j+" "+filename.getName(), "Entity[" + i + "]: displayName is equal with the displayName of Entity[" + l +"]");
-                    j++;
+                    BackupFileParserImpl.hashMapErrors.put(BackupFileParserImpl.errorNumber + " " + filename.getName(), "Entity[" + i + "]: displayName is equal with the displayName of Entity[" + l + "]");
+                    BackupFileParserImpl.errorNumber++;
                     return false;
                 }
             }
